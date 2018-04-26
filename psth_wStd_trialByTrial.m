@@ -1,11 +1,5 @@
 function [varargout]=psth_wStd_trialByTrial(spikes,binsize,bsmooth,duration,nTrials,theseTrials)
 
-if nargin < 2
-    binsize = 50; 
-end
-if nargin < 3
-    bsmooth = 1;
-end
 % Set duration and number of trials
 if ~isempty(nTrials)
     numtrials=nTrials;
