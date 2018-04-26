@@ -1,0 +1,115 @@
+function trialByTrial_alphaPhaseAnalysis(prefStimset,psths_trialByTrial,allRef_trialByTrial)
+
+offsetAlignWindow=[1.2 1.5];
+
+xt=psths_trialByTrial.xt;
+psths_t=psths_trialByTrial.psths_t;
+psths_ref=allRef_trialByTrial.psths_t;
+
+% Show example trials of spiking in which you have separated units' spikes by
+% tuning to stimuli
+% TUNING to PHASE
+
+% Re-organize psths by current stim.
+curr_psths=cell(size(psths_t,1),1);
+x1=xt(1):xt(2)-xt(1):4.5;
+y=nan(size(psths_t{1,1},1)+size(psths_t{1,2},1)+size(psths_t{1,3},1),length(xt(xt>=0 & xt<=1.5))*3);
+allRef_psths=nan(size(psths_t{1,1},1)+size(psths_t{1,2},1)+size(psths_t{1,3},1),length(xt(xt>=0 & xt<=1.5))*3);
+for i=1:size(psths_t,1)
+    k=1;
+    curry=psths_t{i,1};
+    if i==1
+          curry_ref=psths_ref{1};
+          tempref=makeArraySameLengthAsVec(x1(x1>=0 & x1<=3.5),curry_ref);
+          allRef_psths(k:k+size(temp,1)-1,x1>=0 & x1<=3.5)=tempref;
+    end
+    temp=makeArraySameLengthAsVec(x1(x1>=0 & x1<=3.5),curry);
+    y(k:k+size(temp,1)-1,x1>=0 & x1<=3.5)=temp;
+    k=k+size(temp,1);
+    curry=psths_t{i,2};
+    if i==1
+           curry_ref=psths_ref{2};
+           tempref=makeArraySameLengthAsVec(x1(x1>=0 & x1<=0.5),curry_ref(:,xt>=3));
+           allRef_psths(k:k+size(temp,1)-1,x1>=0 & x1<=0.5)=tempref;
+           tempref=makeArraySameLengthAsVec(x1(x1>=1.5 & x1<=4.5),curry_ref(:,xt>=0 & xt<=3));
+           y(k:k+size(temp,1)-1,x1>=1.5 & x1<=4.5)=temp;
+    end
+    temp=makeArraySameLengthAsVec(x1(x1>=0 & x1<=0.5),curry(:,xt>=3));
+    y(k:k+size(temp,1)-1,x1>=0 & x1<=0.5)=temp;
+    curry=psths_t{i,2};
+    temp=makeArraySameLengthAsVec(x1(x1>=1.5 & x1<=4.5),curry(:,xt>=0 & xt<=3));
+    y(k:k+size(temp,1)-1,x1>=1.5 & x1<=4.5)=temp;
+    k=k+size(temp,1);   
+    curry=psths_t{i,3};
+    temp=makeArraySameLengthAsVec(x1(x1>=0 & x1<=2),curry(:,xt>=1.5 & xt<=3.5));
+    y(k:k+size(temp,1)-1,x1>=0 & x1<=2)=temp;
+    curry=psths_t{i,3};
+    temp=makeArraySameLengthAsVec(x1(x1>=3 & x1<=4.5),curry(:,xt>=0 & xt<=1.5));
+    y(k:k+size(temp,1)-1,x1>=3 & x1<=4.5)=temp;
+    curr_psths{i}=y;
+end
+
+% Add up spikes from units with same tuning
+tuned1trials=addUnitsByTuning(curr_psths,prefStimset,1);
+tuned2trials=addUnitsByTuning(curr_psths,prefStimset,2);
+tuned3trials=addUnitsByTuning(curr_psths,prefStimset,3);
+
+% Reorganize data according to current, previous and next
+currTrials=tuned1trials(:,x1>=0 & x1<=1.5);
+currTrials=[currTrials; tuned2trials(:,x1>=1.5 & x1<=3)];
+currTrials=[currTrials; tuned3trials(:,x1>=3 & x1<=4.5)];
+nextTrials=tuned3trials(:,x1>=0 & x1<=1.5);
+nextTrials=[nextTrials; tuned1trials(:,x1>=1.5 & x1<=3)];
+nextTrials=[nextTrials; tuned2trials(:,x1>=3 & x1<=4.5)];
+prevTrials=tuned2trials(:,x1>=0 & x1<=1.5);
+prevTrials=[prevTrials; tuned3trials(:,x1>=1.5 & x1<=3)];
+prevTrials=[prevTrials; tuned1trials(:,x1>=3 & x1<=4.5)];
+
+% Plot some example trials
+nexamp=100;
+useTrials=1+floor(rand(1,nexamp).*(size(currTrials,1)-1));
+figure(); 
+for i=1:length(useTrials)
+     plot(x1(x1>=0 & x1<=1.5),currTrials(i,:),'Color','k');
+     hold on; 
+     plot(x1(x1>=0 & x1<=1.5),nextTrials(i,:),'Color','r');
+     plot(x1(x1>=0 & x1<=1.5),prevTrials(i,:),'Color','g');
+end
+
+% Cycle-average phase, but do trial-by-trial, then align across trials
+params.Fs=1/(x1(2)-x1(1));
+params.tapers=[0.5 x1(end)-x1(1) 0];
+[avSp,avt,avf]=mtspecgrampb(nanmean(currTrials,1),1),[0.5 0.1],params); % what is this 0.5 0.1 thing?
+allSp=nan(size(currTrials,1),length(avSp));
+allf=nan(size(currTrials,1),length(avf));
+allt=nan(size(currTrials,1),length(avt));
+for i=1:size(currTrials,1)
+      [Sp,t,f]=mtspecgrampb(currTrials(i,:),
+
+
+
+end
+
+function trialSum=addUnitsByTuning(data,prefStimset,currs)
+
+subData=data(prefStimset==currs);
+trialSum=zeros(size(data{1}));
+for i=1:length(subData)
+     trialSum=trialSum+subData{i};
+end
+end
+
+function temp=makeArraySameLengthAsVec(a,b)
+
+% Makes vec b same length as vec a
+
+temp=nan(1,length(a));
+if length(a)>size(b,2)
+    temp(:,1:size(b,2))=b;
+elseif size(b,2)>length(a)
+    temp=b(:,1:length(a));
+else
+    temp=b;
+end
+
+end

@@ -1,0 +1,1 @@
+function rectifyArray(array,dim)
