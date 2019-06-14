@@ -1,4 +1,5 @@
-function [topAv,bottomAv,pref,nonpref,ampOrder,F1phases,highestAmps,takeTop]=plotPrefVersusNonpref(psth,useUnit,refFreqBand,useWindow,useWindowForAmp,ampOrdering,F1phases_input,usel)
+% function [topAv,bottomAv,pref,nonpref,ampOrder,F1phases,highestAmps,takeTop,F1amps]=plotPrefVersusNonpref(psth,useUnit,refFreqBand,useWindow,useWindowForAmp,ampOrdering,F1phases_input,usel,stimconds)
+function [topAv,bottomAv,pref,nonpref,ampOrder,F1phases,highestAmps,takeTop,F1amps]=plotPrefVersusNonpref(psth,useUnit,refFreqBand,useWindow,useWindowForAmp,ampOrdering,F1phases_input,usel)
 
 % takeN=3;
 % stimconds=1:12;
@@ -9,8 +10,10 @@ function [topAv,bottomAv,pref,nonpref,ampOrder,F1phases,highestAmps,takeTop]=plo
 % stimconds=1:16;
 % usel=[0];
 takeN=1;
-stimconds=1;
+% stimconds=1:2;
 showFigs=0;
+
+stimconds=unique(psth.unitStimcond{useUnit});
 
 psths=psth.psths{useUnit};
 trialLED=psth.unitLED{useUnit};
@@ -75,8 +78,8 @@ if ~isempty(F1phases_input)
 end
 % takeTop=find(F1phases>=-pi/2 & F1phases<0);
 takeTop=ampOrder(end-takeN+1:end);
-% highestAmps=nanmean(F1amps(ampOrder(end-takeN+1:end)));
-highestAmps=nanmean(F1amps(ampOrder(1:takeN)));
+highestAmps=nanmean(F1amps(ampOrder(end-takeN+1:end)));
+% highestAmps=nanmean(F1amps(ampOrder(1:takeN)));
 % takeBottom=ampOrder(1:takeN-1);
 takeBottom=ampOrder(1:takeN);
 topAv=nan(takeN,2*length(psth.t));

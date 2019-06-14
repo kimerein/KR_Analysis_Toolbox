@@ -12,9 +12,9 @@ freqs=[1 2 4 6 8 10 12 14 16 18 20 30 40 50 60];
 % uses_tri={{a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}};
 
 % Mawake329
-a=1:764;
-uses=   {{[1 1.05]}; {[2 2.05]}; {[4 4.05]}; {[6 6.05]}; {[8 8.05]}; {[10 10.05]}; {[12 12.05]}; {[14 14.05]}; {[16 16.05]}; {[18 18.05]}; {[20 20.05]}; {[30 30.05]}; {[40 40.05]}; {[50 50.05]}; {[60 60.05]}};           
-uses_tri={{a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}};
+% a=1:764;
+% uses=   {{[1 1.05]}; {[2 2.05]}; {[4 4.05]}; {[6 6.05]}; {[8 8.05]}; {[10 10.05]}; {[12 12.05]}; {[14 14.05]}; {[16 16.05]}; {[18 18.05]}; {[20 20.05]}; {[30 30.05]}; {[40 40.05]}; {[50 50.05]}; {[60 60.05]}};           
+% uses_tri={{a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}};
 
 
 % Mawake343
@@ -134,8 +134,8 @@ uses_tri={{a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; 
 
 
 %uses=unique(dLGNpsth.unitStimcond{1});
-% usealls=1:10000;
-usealls=[1 1.05 2 2.05 4 4.05 6 6.05 8 8.05 10 10.05 12 12.05 14 14.05 16 16.05 18 18.05 20 20.05 30 30.05 40 40.05 50 50.05 60 60.05];
+usealls=0:10000;
+% usealls=[1 1.05 2 2.05 4 4.05 6 6.05 8 8.05 10 10.05 12 12.05 14 14.05 16 16.05 18 18.05 20 20.05 30 30.05 40 40.05 50 50.05 60 60.05];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % if isempty(LFPdata)
@@ -259,7 +259,7 @@ theta_trialAv=avResponses(theta_trialAv_temp);
 save([outputDir '\' 'noTheta_trialAv_noLED.mat'],'noTheta_trialAv');
 save([outputDir '\' 'theta_trialAv_noLED.mat'],'theta_trialAv');
 
-[noTheta.allS,noTheta.HFa,noTheta.LFa,noTheta.F1amp,noTheta.allpower]=getHFandLFalphaResponses(filt_psth,ones(length(filt_psth.psths),1),zeros(length(filt_psth.psths),1),0,usealls,usel,);
+[noTheta.allS,noTheta.HFa,noTheta.LFa,noTheta.F1amp,noTheta.allpower]=getHFandLFalphaResponses(filt_psth,ones(length(filt_psth.psths),1),zeros(length(filt_psth.psths),1),0,usealls,usel);
 save([outputDir '\' 'noTheta_noLED.mat'],'noTheta');
 [theta.allS,theta.HFa,theta.LFa,theta.F1amp,theta.allpower]=getHFandLFalphaResponses(filt_psth_theta,ones(length(filt_psth_theta.psths),1),zeros(length(filt_psth_theta.psths),1),0,usealls,usel);
 save([outputDir '\' 'theta_noLED.mat'],'theta');

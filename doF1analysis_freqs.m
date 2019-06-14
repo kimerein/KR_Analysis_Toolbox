@@ -7,9 +7,9 @@ freqs=[1 2 4 6 8 10 12 14 16 18 20 30 40 50 60];
 % uses_tri={{a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}};
  
 % Mawake327
-a=1:913;
-uses=   {{[1 1.05]}; {[2 2.05]}; {[4 4.05]}; {[6 6.05]}; {[8 8.05]}; {[10 10.05]}; {[12 12.05]}; {[14 14.05]}; {[16 16.05]}; {[18 18.05]}; {[20 20.05]}; {[30 30.05]}; {[40 40.05]}; {[50 50.05]}; {[60 60.05]}};           
-uses_tri={{a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}};
+% a=1:913;
+% uses=   {{[1 1.05]}; {[2 2.05]}; {[4 4.05]}; {[6 6.05]}; {[8 8.05]}; {[10 10.05]}; {[12 12.05]}; {[14 14.05]}; {[16 16.05]}; {[18 18.05]}; {[20 20.05]}; {[30 30.05]}; {[40 40.05]}; {[50 50.05]}; {[60 60.05]}};           
+% uses_tri={{a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}; {a a}};
 
 % Mawake329
 % a=1:764;
@@ -343,7 +343,7 @@ for i=1:length(uses)
         allcurr_psth_theta=concatPSTHs(allcurr_psth_theta,curr_psth_theta);
     end    
     [noTheta_trialAv_temp(i).allS,noTheta_trialAv_temp(i).HFa,noTheta_trialAv_temp(i).LFa,noTheta_trialAv_temp(i).F1amp,noTheta_trialAv_temp(i).allpower]=getHFandLFalphaResponses(allcurr_psth,ones(length(allcurr_psth.psths),1),zeros(length(allcurr_psth.psths),1),1,usealls,usel,freqs(i));
-    [theta_trialAv_temp(i).allS,theta_trialAv_temp(i).HFa,theta_trialAv_temp(i).LFa,theta_trialAv_temp(i).F1amp,theta_trialAv_temp(i).allpower]=getHFandLFalphaResponses(allcurr_psth_theta,ones(length(filt_psth_theta.psths),1),zeros(length(filt_psth_theta.psths),1),1,usealls,usel,freqs(i));
+    [theta_trialAv_temp(i).allS,theta_trialAv_temp(i).HFa,theta_trialAv_temp(i).LFa,theta_trialAv_temp(i).F1amp,theta_trialAv_temp(i).allpower]=getHFandLFalphaResponses(allcurr_psth_theta,ones(length(allcurr_psth_theta.psths),1),zeros(length(allcurr_psth_theta.psths),1),1,usealls,usel,freqs(i));
 end
 save([outputDir '\' 'noTheta_trialAv_temp_noLED.mat'],'noTheta_trialAv_temp');
 save([outputDir '\' 'theta_trialAv_temp_noLED.mat'],'theta_trialAv_temp');
@@ -454,4 +454,63 @@ end
 
 end
 
+
+function [allS,HFa,LFa,F1amp,allpower]=getHFandLFalphaResponses(psth1,likes1,sigCells,avBeforeSpec,uses,usel,currF1)
+% function [allS,HFa,LFa,F1amp,allpower]=getHFandLFalphaResponses(psth1,likes1,sigCells,avBeforeSpec,uses,usel)
+
+allpower=[];
+allS=[];
+HFa=[];
+LFa=[];
+F1amp=[];
+
+% usel=[0];
+% uses=[1];
+% HFrange=[11.5 12.5];
+HFrange=[11.5 20];
+LFrange=[4 6];
+% F1range=[2.5 3.5];
+% F1range=[currF1-0.5 currF1+0.5];
+F1range=[currF1-0.75 currF1+0.75];
+if currF1==1
+    F1range=[1 2];
+end
+% F1range=[1 10];
+allrange=[10 99.5];
+% avBeforeSpec=1;
+
+% movingwin=[1 0.05]; v1
+% movingwin=[0.165 0.025];
+movingwin=2*[0.165 0.025];
+% params.tapers=[5 6]; v1
+params.tapers=[3 5];
+params.Fs=1/(psth1.t(2)-psth1.t(1));
+% params.fpass=[1 30];
+params.fpass=[1 100];
+params.trialave=1;
+
+% useUnits=find(likes1==1 & sigCells<=0.05);
+useUnits=find(likes1==1 & sigCells<=1);
+allS.t=[];
+allS.f=[];
+allS.S=cell(1,length(useUnits));
+for i=1:length(useUnits)
+    p=psth1.psths{useUnits(i)};
+    l=psth1.unitLED{useUnits(i)};
+    s=psth1.unitStimcond{useUnits(i)};
+    if avBeforeSpec==1 
+        p=nanmean(p(ismember(l,usel) & ismember(s,uses),:),1)';
+        [S,t,f]=mtspecgrampb(p,movingwin,params);
+    else
+        [S,t,f]=mtspecgrampb(p(ismember(l,usel) & ismember(s,uses),:)',movingwin,params);
+    end
+    allS.S{i}=S;
+    allS.t=t;
+    allS.f=f;
+    HFa(i,:)=nanmean(S(:,f>=HFrange(1) & f<=HFrange(2)),2)';
+    LFa(i,:)=nanmean(S(:,f>=LFrange(1) & f<=LFrange(2)),2)';
+    F1amp(i,:)=nanmean(S(:,f>=F1range(1) & f<=F1range(2)),2)';
+    allpower(i,:)=nanmean(S(:,f>=allrange(1) & f<=allrange(2)),2)';
+end
+end
 

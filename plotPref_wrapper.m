@@ -6,6 +6,8 @@ trialDuration=14.5;
 
 u=1:length(psth.psths);
 
+ampOrder_backup=ampOrder;
+
 nTrials=size(psth.psths{1},1);
 firstN=floor(nTrials/2);
 % lastN=nTrials-firstN;
@@ -64,6 +66,7 @@ secondBottom_PSTH_LED.y=nan(length(u),nTimes);
 firstF1amps=nan(length(u),1);
 secondF1amps=nan(length(u),1);
 for i=1:length(u)
+    ampOrder=ampOrder_backup;
     if isempty(ampOrder)
         [topAv,bottomAv,pref,nonpref,ampOrder,F1phases,~,takeTop]=plotPrefVersusNonpref(psth,i,refFreqBand,useWindow,useWindowForAmp,[],[],ledOff);
     else

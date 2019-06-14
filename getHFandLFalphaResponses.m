@@ -1,4 +1,5 @@
-function [allS,HFa,LFa,F1amp,allpower]=getHFandLFalphaResponses(psth1,likes1,sigCells,avBeforeSpec,uses,usel,currF1)
+% function [allS,HFa,LFa,F1amp,allpower]=getHFandLFalphaResponses(psth1,likes1,sigCells,avBeforeSpec,uses,usel,currF1)
+function [allS,HFa,LFa,F1amp,allpower]=getHFandLFalphaResponses(psth1,likes1,sigCells,avBeforeSpec,uses,usel)
 
 allpower=[];
 allS=[];
@@ -11,12 +12,12 @@ F1amp=[];
 % HFrange=[11.5 12.5];
 HFrange=[11.5 20];
 LFrange=[4 6];
-% F1range=[2.5 3.5];
-F1range=[currF1-0.5 currF1+0.5];
-F1range=[currF1-0.75 currF1+0.75];
-if currF1==1
-    F1range=[1 2];
-end
+F1range=[2.5 3.5];
+% F1range=[currF1-0.5 currF1+0.5];
+% F1range=[currF1-0.75 currF1+0.75];
+% if currF1==1
+%     F1range=[1 2];
+% end
 % F1range=[1 10];
 allrange=[10 99.5];
 % avBeforeSpec=1;

@@ -11,10 +11,11 @@ freqs=[1 2 4 6 8 10 12 14 16 18 20 30 40 50 60];
 % useLED=[1.0000    1.0500    2.0000    2.0500    4.0000    4.0500    6.0000    6.0500    8.0000    8.0500   10.0000 ...
 %         10.0500   12.0000   12.0500   14.0000   14.0500   16.0000   16.0500   18.0000   18.0500   20.0000   20.0500 ...
 %         30.0000   30.0500   40.0000   40.0500   50.0000   50.0500   60.0000   60.0500];
-useLED=[freqs/100 freqs/100+5];
-useLED=sort(useLED);
+% useLED=[freqs/100 freqs/100+5];
+% useLED=sort(useLED);
 % useLED=[0 0.1515 0.2525];
 % useLED=[0 0.05 5.00 5.05];
+useLED=[0 5];
 % useLED=freqs+0.05;
 % useLED=sort([freqs freqs+0.05]);
 % bin=1.2; % in ms
@@ -22,7 +23,11 @@ useLED=sort(useLED);
 bin=10; % in ms
 % trialDuration=5;
 trialDuration=autocorr_window(2)-autocorr_window(1);
-useStimcond={[1:100000]};
+% useStimcond={[0:100000]};
+useStimcond={[1:8]};
+% useStimcond={[1.0000    1.0500    2.0000    2.0500    4.0000    4.0500    6.0000    6.0500    8.0000    8.0500   10.0000 ...
+%         10.0500   12.0000   12.0500   14.0000   14.0500   16.0000   16.0500   18.0000   18.0500   20.0000   20.0500 ...
+%         30.0000   30.0500   40.0000   40.0500   50.0000   50.0500   60.0000   60.0500]};
 
 % Get trial by trial PSTHs for units
 [x,psths_t,unitTrials,unitStimcond,unitLED]=getTrialByTrialUnitPSTH_sub(spikes,useAssigns,useLED,bin,trialDuration,useStimcond);
@@ -158,7 +163,9 @@ psths_t=cell(length(allAssigns),length(useStimcond));
 x=[];
 for i=1:length(allAssigns)
     for j=1:length(useStimcond)
-        useSpikes=filtspikes(spikes,0,'assigns',allAssigns(i),'stimcond',useStimcond{j});
+        useSpikes=prep_filtspikes(spikes,'stimcond',[],useStimcond{j});
+        useSpikes=filtspikes(useSpikes,0,'assigns',allAssigns(i));
+        %useSpikes=filtspikes(spikes,0,'assigns',allAssigns(i),'stimcond',useStimcond{j});
         currTrialCon=unitByUnitTrials{i};
         currStimCon=unitByUnitStimcond{i};
         currLEDCon=unitByUnitLED{i};

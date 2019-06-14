@@ -18,7 +18,7 @@ switch code
         temp=[];
         temp1=[];
         for i=1:length(stimValue)
-            spikes=makeTempField(spikes,'stimcond',ledValue(i));
+            spikes=makeTempField(spikes,'stimcond',stimValue(i));
             temp(i,:)=spikes.temp;
             temp1(i,:)=spikes.sweeps.temp;
             spikes.temp=[];

@@ -8,8 +8,8 @@ end
 stepInds=1:n:length(vec);
 for i=1:length(stepInds)
     if i==length(stepInds)
-        newvec(i)=mean(vec(stepInds(i):length(vec)));
+        newvec(i)=nanmean(vec(stepInds(i):length(vec)));
     else
-        newvec(i)=mean(vec(stepInds(i):stepInds(i+1)));
+        newvec(i)=nanmean(vec(stepInds(i):stepInds(i+1)));
     end
 end

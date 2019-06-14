@@ -5,8 +5,15 @@ useThetaState=0;
 psth=[];
 for i=1:length(dd)
     d=dd{i};
+    if ~exist([d '\' psthName '.mat'],'file')
+        disp([d '\' psthName ' does not exist ... Skipping']);
+        continue
+    end
     a=load([d '\' psthName]);
     currpsth=a.(infileName);
+    if strcmp(infileName,'fractionpsth')
+        currpsth.psths=currpsth.psths';
+    end
     if useThetaState==1
         a=load([tt{i} '\' thetaStateName]);
         currtheta=a.(infile_thetaStateName);

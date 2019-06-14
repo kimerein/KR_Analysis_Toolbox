@@ -1,64 +1,77 @@
-function [blackPSTH,redPSTH]=averageUnitPSTHs(varargin)
+function compareBestAndWorstResponses(psth,downSamp,responseFromPSTH,ampOrder_max,ampOrder_min)
 
-if length(varargin)==1
-    psth=varargin{1};
-    useStims=[];
-elseif length(varargin)==2
-    psth=varargin{1};
-    useStims=varargin{2};
+% assumes all units from same experiment, recorded simultaneously
+
+t=psth.t;
+stimcond=psth.unitStimcond{1};
+ledcond=psth.unitLED{1};
+
+u=unique(stimcond);
+
+for i=1:length(u)
+    currstimcond=u(i);
+    [black,red]=averageUnitPSTHs(responseFromPSTH,u(i));
+    psthByStimcond.(['black' num2str(i)])=black;
+    psthByStimcond.(['red' num2str(i)])=red;
 end
 
-downSamp=1; % down sample factor
-% downSamp=10; % down sample factor
-blackLED=[0];
-redLED=[0.05 0.7575 0.2525 0.25 2.5 5.00 5.05];
-suppressFigures=1;
-% redLED=[0];
-% blackLED=[1 2 4 6 8 10 12 14 16 18 20 30 40 50 60];
-% redLED=[1 2 4 6 8 10 12 14 16 18 20 30 40 50 60]+0.05;
+for i=1:length(u)
+    temp=psthByStimcond.(['black' num2str(i)]);
+    avResponseByStimcond.(['black' num2str(i)])=nanmean(temp(:,t>=4 & t<=6.5),2);
+    temp=psthByStimcond.(['red' num2str(i)]);
+    avResponseByStimcond.(['red' num2str(i)])=nanmean(temp(:,t>=4 & t<=6.5),2);
+end
 
-% l=psth.unitLED{1};
-
-blackPSTH=zeros(length(psth.psths),length(psth.t));
-redPSTH=zeros(length(psth.psths),length(psth.t));
-for i=1:length(psth.psths)
-    p=psth.psths{i};
-    l=psth.unitLED{i};
-    s=psth.unitStimcond{i};
-    if ~isempty(useStims)
-        blackPSTH(i,:)=nanmean(p(ismember(l,blackLED) & ismember(s,useStims),:),1);
-        redPSTH(i,:)=nanmean(p(ismember(l,redLED) & ismember(s,useStims),:),1);
-    else
-        blackPSTH(i,:)=nanmean(p(ismember(l,blackLED),:),1);
-        redPSTH(i,:)=nanmean(p(ismember(l,redLED),:),1);
+maxInd=nan(1,size(psthByStimcond.black1,1));
+minInd=nan(1,size(psthByStimcond.black1,1));
+for i=1:size(psthByStimcond.black1,1)
+    % by units
+    responses=[];
+    for j=1:length(u)
+        % by stimcond
+        temp=avResponseByStimcond.(['black' num2str(j)]);
+        responses=[responses temp(i)];
     end
+    % find max response
+    [~,maxInd(i)]=nanmax(responses);
+    % find min response
+    [~,minInd(i)]=nanmin(responses);
 end
 
-if suppressFigures==1
-    return
+if ~isempty(ampOrder_max)
+    maxInd=ampOrder_max;
+    minInd=ampOrder_min;    
 end
 
-% figure(); 
-% hax=axes();
-downt=downSampAv(psth.t,downSamp);
-% downy=downSampMatrix(nanmean(blackPSTH,1),downSamp);
-% h=plot(downt,downy,'Color','k');
-sub_plotWStderr(downSampMatrix(blackPSTH,downSamp),downSampMatrix(redPSTH,downSamp),downt,'k','r');
-% hold on;
-% % addErrBar(downt,downy,nanstd(downSampMatrix(blackPSTH,downSamp),[],1)./sqrt(size(blackPSTH,1)),'y',hax,h);
-% downy=downSampMatrix(nanmean(redPSTH,1),downSamp);
-% h=plot(downt,downy,'Color','r');
-% % addErrBar(downt,downy,nanstd(downSampMatrix(redPSTH,downSamp),[],1)./sqrt(size(redPSTH,1)),'y',hax,h);
+for i=1:length(u)
+    currstimcond=u(i);
+    [black,red]=averageUnitPSTHs(psth,u(i));
+    psthByStimcond_forFigure.(['black' num2str(i)])=black;
+    psthByStimcond_forFigure.(['red' num2str(i)])=red;
+end
 
-% blackDist=blackPSTH(:,downt>=3 & downt<=4);
-% redDist=redPSTH(:,downt>=3 & downt<=4);
-% tDist=downt(downt>=3 & downt<=4);
-% for i=1:20
-%     currBlack=blackDist(:,i);
-%     currRed=redDist(:,i);
-%     [h,prank]=ttest2(currBlack,currRed);
-% %     disp([prank tDist(i)]);  
-% end
+% make best and worst response psths
+for i=1:size(psthByStimcond_forFigure.black1,1)
+    % by units
+    temp=psthByStimcond_forFigure.(['black' num2str(maxInd(i))]);
+    bestPSTH_black(i,:)=temp(i,:);
+    temp=psthByStimcond_forFigure.(['black' num2str(minInd(i))]);
+    worstPSTH_black(i,:)=temp(i,:);
+    
+    temp=psthByStimcond_forFigure.(['red' num2str(maxInd(i))]);
+    bestPSTH_red(i,:)=temp(i,:);
+    temp=psthByStimcond_forFigure.(['red' num2str(minInd(i))]);
+    worstPSTH_red(i,:)=temp(i,:);
+end
+
+downt=downSampAv(t,downSamp);
+
+sub_plotWStderr(downSampMatrix(bestPSTH_black,downSamp),downSampMatrix(worstPSTH_black,downSamp),downt,'c','k');
+title('No LED best vs worst');
+
+sub_plotWStderr(downSampMatrix(bestPSTH_red,downSamp),downSampMatrix(worstPSTH_red,downSamp),downt,'r','m');
+title('LED best vs worst');
+
 
 end
 
