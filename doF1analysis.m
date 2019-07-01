@@ -1,6 +1,5 @@
 function doF1analysis(expt,useFileInd,outputDir,LFP_Fs,dLGNpsth,usel_noLED,usel_LED,LFPdata,uses,uses_tri,noThetaTrials)
 
-freqs=[1 2 4 6 8 10 12 14 16 18 20 30 40 50 60];
 % Mawake328
 % a=1:656;
 % uses=   {{[1 1.05]}; {[2 2.05]}; {[4 4.05]}; {[6 6.05]}; {[8 8.05]}; {[10 10.05]}; {[12 12.05]}; {[14 14.05]}; {[16 16.05]}; {[18 18.05]}; {[20 20.05]}; {[30 30.05]}; {[40 40.05]}; {[50 50.05]}; {[60 60.05]}};           
