@@ -1,11 +1,12 @@
 function [fractionpsth,allspikespsth,burstpsth,unitISIplots,spikes]=makeBurstPSTH(spikes,psth,noThetaTrials)
 
-trialDuration=14.5;
+% trialDuration=14.5;
+trialDuration=4;
 
-tri=psth.unitTrials{1};
-spikes=filtspikes(spikes,0,'trials',tri);
 spikes.trials=spikes.trials-min(spikes.trials)+1;
 spikes.sweeps.trials=spikes.sweeps.trials-min(spikes.sweeps.trials)+1;
+tri=psth.unitTrials{1};
+spikes=filtspikes(spikes,0,'trials',tri);
 
 u=unique(spikes.assigns);
 if length(psth.psths)>length(u)
@@ -18,10 +19,11 @@ end
 % timeBins=0:0.01:trialDuration;
 timeBins=psth.t-((psth.t(2)-psth.t(1))/2);
 useStimcond={[1:100000]};
-useLED=[0 0.05 0.1515 0.2525 0.7575 5.00 5.05];
+% useLED=[0 0.05 0.1515 0.2525 0.7575 5.00 5.05];
+useLED=unique(psth.unitLED{1});
 useAssigns=unique(spikes.assigns);
 bin=10; % in ms
-trialDuration=14.5;
+trialDuration=4;
 spikes.isFirstSpikeInBurst=zeros(size(spikes.trials));
 spikes.isFollowingSpikeInBurst=zeros(size(spikes.trials));
 spikes.isInBurst=zeros(size(spikes.trials));
@@ -307,7 +309,7 @@ for i=1:length(allAssigns)
     unitByUnitStimcond{i}=sstim(indsin);
     unitByUnitLED{i}=sled(indsin); 
 end
-
+ 
 % for i=1:length(allAssigns)
 %     unitByUnitTrials{i}=unique(spikes.sweeps.trials);
 %     unitByUnitStimcond{i}=spikes.sweeps.stimcond(unique(spikes.sweeps.trials));
