@@ -1,10 +1,10 @@
 function [data1,data2,isBigEnough]=plotWStderr_simple(data1,data2,trialDuration,c1,c2,times,allLines)
 
-norm=0;
-normWindow=[1 3];
+norm=1;
+% normWindow=[1 3];
 normWindow=[3 6];
 baseSubtract=1;
-baseWindow=[0 0.7];
+% baseWindow=[0 0.7];
 baseWindow=[0 2.3];
 ds=1;
 doFill=1;
@@ -20,19 +20,19 @@ if baseSubtract==1
     end
 end
 
-% thresh=2*10^4; 
-% % thresh=0.44*10^4; % for 4 Hz
-% % thresh=0.10*10^4; % for 14 Hz
-% % thresh=0.6*10^4; % for 20 Hz
-% % thresh=0;
-% % isBigEnough=(nanmean(data1(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh & nanmean(data2(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh) & nanmean(data1(:,t>=normWindow(1) & t<=normWindow(2)),2)>0 & nanmean(data2(:,t>=normWindow(1) & t<=normWindow(2)),2)>0;
-% % isBigEnough=(nanmean(data1(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh);
-% % isBigEnough=nanmean(data1(:,t>=5 & t<=6),2)>thresh;
-% % isBigEnough=(nanmean(data1(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh & nanmean(data2(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh);
+thresh=2*10^4; 
+thresh=0.25*10^4; 
+% thresh=0.44*10^4; % for 4 Hz
+% thresh=0.10*10^4; % for 14 Hz
+% thresh=0.6*10^4; % for 20 Hz
+% isBigEnough=(nanmean(data1(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh & nanmean(data2(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh) & nanmean(data1(:,t>=normWindow(1) & t<=normWindow(2)),2)>0 & nanmean(data2(:,t>=normWindow(1) & t<=normWindow(2)),2)>0;
 % isBigEnough=(nanmean(data1(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh);
-% data1=data1(isBigEnough,:);
-% data2=data2(isBigEnough,:);
-% disp(sum(isBigEnough==1));
+% isBigEnough=nanmean(data1(:,t>=5 & t<=6),2)>thresh;
+% isBigEnough=(nanmean(data1(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh & nanmean(data2(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh);
+isBigEnough=(nanmean(data1(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh);
+data1=data1(isBigEnough,:);
+data2=data2(isBigEnough,:);
+disp(sum(isBigEnough==1));
 
 % % baseWindow=[0.51 1]; % for LOW FREQ
 % % baseWindow=[0.9 1]; % for HIGH FREQ

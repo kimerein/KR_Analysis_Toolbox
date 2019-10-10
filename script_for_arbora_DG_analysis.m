@@ -6,7 +6,7 @@ addpath(genpath('chronux_2_11'));
 
 %% Get daq file names
 
-[theseAreDaqs,LED,Stim]=getDaqInDirectory('\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\20190630 From Arbora\DG\DAQ files');
+[theseAreDaqs,LED,Stim]=getDaqInDirectory('\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\arbora 2019-07-07\DG\DAQ');
 
 % clear theseAreDaqs;
 % for i=1:115
@@ -15,22 +15,24 @@ addpath(genpath('chronux_2_11'));
 
 %% Get LFP
 
-% LFPchannel=2; % arbora recordings
-LFPchannel=32; % kim recordings (config 2)
-[LFPbySweep,Fs,completeSweeps]=getJustLFPbySweep('\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\20190630 From Arbora\DG\DAQ files\',theseAreDaqs,20000,1,[LFPchannel]);
+LFPchannel=2; % arbora recordings
+% LFPchannel=32; % kim recordings (config 2)
+[LFPbySweep,Fs,completeSweeps]=getJustLFPbySweep('\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\arbora 2019-07-07\DG\DAQ\',theseAreDaqs,20000,1,[LFPchannel]);
 thetaDiff=getHippoTheta(LFPbySweep,zeros(1,size(LFPbySweep{1},1)),zeros(1,size(LFPbySweep{1},1)),0,0,20000);
-noThetaTrials=nanmean(thetaDiff,2)<-0.03;
+noThetaTrials=nanmean(thetaDiff,2)<-0.05;
+% noThetaTrials=nanmean(thetaDiff,2)<-0.1;
+% noThetaTrials=nanmean(thetaDiff,2)<0.01376;
 
 %% Get LED
 
 LEDchannel=22;
-[LEDbySweep]=getJustLFPbySweep('\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\20190630 From Arbora\DG\DAQ files\',theseAreDaqs,20000,1,[LEDchannel]);
+[LEDbySweep]=getJustLFPbySweep('\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\arbora 2019-07-07\DG\DAQ\',theseAreDaqs,20000,1,[LEDchannel]);
 temp=LEDbySweep{1};
 LEDon=any(temp>0.5,2);
 
 %% Load spikes and fix LED trials
 
-load('\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\20190630 From Arbora\DG\kim sorted\AR2019-06-14_T5_Ch_13_12_11_10_spikes_SD4_kimsorted.mat');
+load('\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\arbora 2019-07-07\DG\Kim sorted\AR2019-07-07_T7_Ch_5_4_3_2_spikes_SD4.mat');
 trialsinexpt=unique(spikes.sweeps.trials);
 ftrials=trialsinexpt(LEDon==1);
 
@@ -57,12 +59,12 @@ psth=measureAllUnitsResponseProperties(spikes,useAssigns,[0 trialDuration]);
 a=unique(spikes.trials);
 stico=unique(spikes.stimcond);
 disp(stico);
-% uses={{[1]}; {[2]}; {[3]}; {[4]}; {[5]}; {[6]}; {[7]}; {[8]}};
-% uses_tri={{a}; {a}; {a}; {a}; {a}; {a}; {a}; {a}}; 
-uses={{[1]}; {[2]}; {[3]}; {[4]}};
-uses_tri={{a}; {a}; {a}; {a}}; 
+uses={{[1]}; {[2]}; {[3]}; {[4]}; {[5]}; {[6]}; {[7]}; {[8]}};
+uses_tri={{a}; {a}; {a}; {a}; {a}; {a}; {a}; {a}}; 
+% uses={{[1]}; {[2]}; {[3]}; {[4]}};
+% uses_tri={{a}; {a}; {a}; {a}}; 
 
-outputDir='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\20190630 From Arbora\DG\Sorted units F1 analysis\T5_Ch_13_12_11_10';
+outputDir='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\arbora 2019-07-07\DG\Sorted units F1 analysis\T7';
 
 doF1analysis([],[],outputDir,[],psth,0,5,[],uses,uses_tri,noThetaTrials);
 

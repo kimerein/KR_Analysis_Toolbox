@@ -44,6 +44,7 @@ end
 plotWStderr_simple(noTheta_trialAv_noLED.F1amp,theta_trialAv_noLED.F1amp,trialDuration,'k','r',times,allLines);
 plotWStderr_simple(noTheta_trialAv_noLED.F1amp,noTheta_trialAv_LED.F1amp,trialDuration,'k','b',times,allLines);
 plotWStderr_simple(theta_trialAv_noLED.F1amp,theta_trialAv_LED.F1amp,trialDuration,'r','c',times,allLines);
+plotWStderr_simple(noTheta_trialAv_noLED.F1amp,theta_trialAv_LED.F1amp,trialDuration,'k','c',times,allLines);
 
 end
 
