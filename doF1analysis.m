@@ -239,11 +239,11 @@ for i=1:length(uses)
         
         sforsub=filt_psth.unitStimcond{1};
         triforsub=filt_psth.unitTrials{1};
-        curr_psth=filtPSTH(filt_psth,triforsub(ismember(triforsub,subcurrtri) & ismember(sforsub,subcurrs)));
+        curr_psth=filtPSTH(filt_psth,triforsub(ismember(single(triforsub),single(subcurrtri)) & ismember(single(sforsub),single(subcurrs))));
         
         sforsub=filt_psth_theta.unitStimcond{1};
         triforsub=filt_psth_theta.unitTrials{1};
-        curr_psth_theta=filtPSTH(filt_psth_theta,triforsub(ismember(triforsub,subcurrtri) & ismember(sforsub,subcurrs)));
+        curr_psth_theta=filtPSTH(filt_psth_theta,triforsub(ismember(single(triforsub),single(subcurrtri)) & ismember(single(sforsub),single(subcurrs))));
         
         allcurr_psth=concatPSTHs(allcurr_psth,curr_psth);
         allcurr_psth_theta=concatPSTHs(allcurr_psth_theta,curr_psth_theta);
@@ -277,11 +277,11 @@ for i=1:length(uses)
         
         sforsub=filt_psth.unitStimcond{1};
         triforsub=filt_psth.unitTrials{1};
-        curr_psth=filtPSTH(filt_psth,triforsub(ismember(triforsub,subcurrtri) & ismember(sforsub,subcurrs)));
+        curr_psth=filtPSTH(filt_psth,triforsub(ismember(single(triforsub),single(subcurrtri)) & ismember(single(sforsub),single(subcurrs))));
         
         sforsub=filt_psth_theta.unitStimcond{1};
         triforsub=filt_psth_theta.unitTrials{1};
-        curr_psth_theta=filtPSTH(filt_psth_theta,triforsub(ismember(triforsub,subcurrtri) & ismember(sforsub,subcurrs)));
+        curr_psth_theta=filtPSTH(filt_psth_theta,triforsub(ismember(single(triforsub),single(subcurrtri)) & ismember(single(sforsub),single(subcurrs))));
         
         allcurr_psth=concatPSTHs(allcurr_psth,curr_psth);
         allcurr_psth_theta=concatPSTHs(allcurr_psth_theta,curr_psth_theta);

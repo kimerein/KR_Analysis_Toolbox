@@ -21,7 +21,7 @@ end
 spikes.sweeps.fileInd=spikes.sweeps.fromExpt_fileInd-nanmin(spikes.sweeps.fromExpt_fileInd)+1;
 spikes.sweeps.trials=unique(spikes.trials);
 
-spikes.led=single(ones(size(spikes.trials)));
+spikes.led=double(ones(size(spikes.trials)));
 spikes.stimcond=single(ones(size(spikes.trials)));
 spikes.fileInd=single(ones(size(spikes.trials)));
 

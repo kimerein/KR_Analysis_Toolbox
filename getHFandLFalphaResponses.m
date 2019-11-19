@@ -42,10 +42,10 @@ for i=1:length(useUnits)
     l=psth1.unitLED{useUnits(i)};
     s=psth1.unitStimcond{useUnits(i)};
     if avBeforeSpec==1 
-        p=nanmean(p(ismember(l,usel) & ismember(s,uses),:),1)';
+        p=nanmean(p(ismember(single(l),single(usel)) & ismember(single(s),single(uses)),:),1)';
         [S,t,f]=mtspecgrampb(p,movingwin,params);
     else
-        [S,t,f]=mtspecgrampb(p(ismember(l,usel) & ismember(s,uses),:)',movingwin,params);
+        [S,t,f]=mtspecgrampb(p(ismember(single(l),single(usel)) & ismember(single(s),single(uses)),:)',movingwin,params);
     end
     allS.S{i}=S;
     allS.t=t;
