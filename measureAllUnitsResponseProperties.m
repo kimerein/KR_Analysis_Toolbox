@@ -171,9 +171,9 @@ for i=1:length(allAssigns)
         currStimCon=unitByUnitStimcond{i};
         currLEDCon=unitByUnitLED{i};
         if ~isempty(useLED)
-            unitByUnitConsensus=currTrialCon(ismember(currStimCon,useStimcond{j}) & ismember(currLEDCon,useLED));
+            unitByUnitConsensus=currTrialCon(ismember(currStimCon,single(useStimcond{j})) & ismember(single(currLEDCon),single(useLED)));
         else
-            unitByUnitConsensus=currTrialCon(ismember(currStimCon,useStimcond{j}));
+            unitByUnitConsensus=currTrialCon(ismember(currStimCon,single(useStimcond{j})));
         end
         if isempty(unitByUnitConsensus)
             disp('problem with unitByUnitConsensus');

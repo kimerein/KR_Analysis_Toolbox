@@ -26,6 +26,7 @@ noThetaTrials=nanmean(thetaDiff,2)<-0.05;
 %% Get LED
 
 LEDchannel=22;
+% LEDchannel=6; % for some Kim expts
 [LEDbySweep]=getJustLFPbySweep('\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\arbora 2019-07-07\DG\DAQ\',theseAreDaqs,20000,1,[LEDchannel]);
 temp=LEDbySweep{1};
 LEDon=any(temp>0.5,2);
