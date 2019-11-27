@@ -1,6 +1,6 @@
 function [output,psth]=find_putative_ArchT_units(spikes,psth,LEDbySweep,ledConds,taketri,ledVal,trialDuration)
 
-% direct_window=35; % in ms, the time from LED onset below which a 
+short_direct_window=35; % in ms, the time from LED onset below which a 
 % significant suppression indicates ArchT expression
 % baseline_window=[0 3]; % in seconds from trial onset
 % stimWindow=[4 6.5]; % in seconds from trial onset
@@ -51,6 +51,7 @@ direct_window=direct_window/1000; % convert to seconds
 amp_change=nan(1,length(psth.psths));
 % 2. P-val of the change from baseline during this same time window
 pvals=nan(1,length(psth.psths));
+pvals_shortDirect=nan(1,length(psth.psths));
 % 3. Suppression of the evoked response
 visev_change=nan(1,length(psth.psths)); % amplitude change during visual stimulus
 visev_pvals=nan(1,length(psth.psths)); % p-val of change during visual stimulus

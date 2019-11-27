@@ -1,14 +1,7 @@
-function [output,psth]=find_putative_ArchT_units(spikes,psth,LEDbySweep,ledConds,taketri,ledVal,trialDuration)
+function [output,wvfms,psth]=find_putative_ntsr1_units(spikes,psth,LEDbySweep,ledConds,taketri,ledVal,trialDuration,Fs,exptType)
 
-% direct_window=35; % in ms, the time from LED onset below which a 
-% significant suppression indicates ArchT expression
 % baseline_window=[0 3]; % in seconds from trial onset
-% stimWindow=[4 6.5]; % in seconds from trial onset
-
-%  For V1 units
-direct_window=6000; % in ms, the time from LED onset below which a 
-% significant suppression indicates ArchT expression
-baseline_window=[0 3]; % in seconds from trial onset
+baseline_window=[0 1]; % in seconds from trial onset
 stimWindow=[4 6.5]; % in seconds from trial onset
 
 % Analyze the following:
@@ -40,13 +33,95 @@ if ~isempty(LEDbySweep)
     % Align psth to led
     times=linspace(0,trialDuration,size(LEDbySweep,2));
     [psth,ledConds,ledStart]=alignPSTHtoLED(psth,LEDbySweep,ledConds,ledVal,times,[]);
+    % Realign baseline windows
+    times=psth.t;
+    %psth=realignBaseline(psth,baseline_window,ledVal,times);
 else
+    times=psth.t;
     ledStart=3.2;
 end
-times=psth.t;
 
-% 1. Amplitude of the change from baseline during the first (default) 35-45 ms after
-% LED onset
+% Check baseline_window and stimWindow
+switch exptType
+    case 'ArchT'
+        direct_window_short=35; % in ms
+        direct_window_long=6000; % in ms
+    case 'ChR'
+        direct_window_short=10; % in ms
+        direct_window_long=35; % in ms
+end
+allpsth=nanmean(psth.psths{1},1);
+for i=2:length(psth.psths)
+    allpsth=allpsth+nanmean(psth.psths{i},1);
+end
+allpsth=allpsth./length(psth.psths);
+figure(); 
+plot(times,allpsth,'Color','k');
+hold on;
+line([baseline_window(1) baseline_window(2)],[nanmax(allpsth) nanmax(allpsth)],'Color','b');
+line([stimWindow(1) stimWindow(2)],[nanmax(allpsth)+0.1 nanmax(allpsth)+0.1],'Color','r');
+line([ledStart ledStart+direct_window_short/1000],[nanmax(allpsth)+0.2 nanmax(allpsth)+0.2],'Color','g');
+line([ledStart ledStart+direct_window_long/1000],[nanmax(allpsth)+0.3 nanmax(allpsth)+0.3],'Color','c');
+legend({'PSTH','baseline window','vis stim window','led short','led long'});
+
+switch exptType
+    case 'ArchT'
+        [amp_change,pvals,visev_change,visev_pvals]=getFx(direct_window_short,psth,times,baseline_window,stimWindow,ledStart,ledVal);
+        output.quick_amp_change=amp_change;
+        output.quick_change_pvals=pvals;
+        output.visev_change=visev_change;
+        output.visev_pvals=visev_pvals;
+        [amp_change,pvals]=getFx(direct_window_long,psth,times,baseline_window,stimWindow,ledStart,ledVal);
+        output.long_amp_change=amp_change;
+        output.long_change_pvals=pvals;
+        output.direct_window_short=direct_window_short;
+        output.direct_window_long=direct_window_long;
+    case 'ChR'
+        [amp_change,pvals,visev_change,visev_pvals]=getFx(direct_window_short,psth,times,baseline_window,stimWindow,ledStart,ledVal);
+        output.quick_amp_change=amp_change;
+        output.quick_change_pvals=pvals;
+        output.visev_change=visev_change;
+        output.visev_pvals=visev_pvals;
+        [amp_change,pvals]=getFx(direct_window_long,psth,times,baseline_window,stimWindow,ledStart,ledVal);
+        output.long_amp_change=amp_change;
+        output.long_change_pvals=pvals;
+        output.direct_window_short=direct_window_short;
+        output.direct_window_long=direct_window_long;
+end
+
+% 4. Waveform half-width-at-half-max
+temp=spikes.labels(:,1);
+useAssigns=temp(spikes.labels(:,2)==2); % 2 means good unit
+disp('Good units:');
+disp(useAssigns);
+[hw,peakToTrough,amp,spikewvfms]=getWaveformFeatures(filtspikes(spikes,0,'assigns',useAssigns),Fs);
+wvfms.hw=hw; wvfms.peakToTrough=peakToTrough; wvfms.amp=amp; wvfms.spikewvfms=spikewvfms;
+
+% Boolean test for putative Ntsr1+ unit
+switch exptType
+    case 'ArchT'
+        output.putative_ntsr1_activity_pattern=(output.quick_amp_change>0 & output.quick_change_pvals<=0.05) | (output.quick_amp_change>0 & output.quick_change_pvals<=0.2 & output.visev_change<0 & output.visev_pvals<=0.05);
+    case 'ChR'
+        output.putative_ntsr1_activity_pattern=output.quick_amp_change<0 & output.long_amp_change<0 & output.quick_change_pvals<=0.05;
+end
+
+end
+
+function psth=realignBaseline(psth,baseline_window,ledVal,times)
+
+for i=1:length(psth)
+    temp=psth.psths{i};
+    l=psth.unitLED{i};
+    temp(ismember(single(l),single(ledVal)),:)=temp(ismember(single(l),single(ledVal)),:)-nanmean(nanmean(temp(ismember(single(l),single(ledVal)),times>=baseline_window(1) & times<baseline_window(2)),1),2);
+    temp(~ismember(single(l),single(ledVal)),:)=temp(~ismember(single(l),single(ledVal)),:)-nanmean(nanmean(temp(~ismember(single(l),single(ledVal)),times>=baseline_window(1) & times<baseline_window(2)),1),2); 
+    psth.psths{i}=temp;
+end
+
+end
+
+function [amp_change,pvals,visev_change,visev_pvals]=getFx(direct_window,psth,times,baseline_window,stimWindow,ledStart,ledVal)
+
+% 1. Amplitude of the change from baseline during the window after LED onset
 direct_window=direct_window/1000; % convert to seconds
 amp_change=nan(1,length(psth.psths));
 % 2. P-val of the change from baseline during this same time window
@@ -62,40 +137,17 @@ for i=1:length(psth.psths)
     spont_no_led=currp(~ismember(single(l),single(ledVal)),times>=ledStart & times<ledStart+direct_window);
     evoked_noLED=nanmean(currp(~ismember(single(l),single(ledVal)),times>=stimWindow(1) & times<stimWindow(2)),2);
     evoked_LED=nanmean(currp(ismember(single(l),single(ledVal)),times>=stimWindow(1) & times<stimWindow(2)),2);
-%     amp_change(i)=nanmean(nanmean(during_led,2)-nanmean(bases,2));
+%     amp_change(i)=nanmean(nanmean(bases,2)-nanmean(during_led,2));
     amp_change(i)=nanmean(nanmean(spont_no_led,2))-nanmean(nanmean(during_led,2));
+%     pvals(i)=ranksum(nanmean(bases,2),nanmean(during_led,2));
     pvals(i)=ranksum(nanmean(spont_no_led,2),nanmean(during_led,2));
     visev_change(i)=nanmean(evoked_noLED)-nanmean(evoked_LED);
     visev_pvals(i)=ranksum(evoked_noLED,evoked_LED);
 end
 
-cmap=colormap(jet(20));
-color_edges=fliplr(0:0.05:0.95);
-color_ind=0;
-
-figure();
-output.amp_change=amp_change;
-output.pvals=pvals;
-output.visev_change=visev_change;
-output.colors=nan(length(pvals),3);
-output.visev_pvals=visev_pvals;
-for i=1:length(pvals)
-    p=pvals(i);
-    color_ind=find(p>color_edges,1,'first');
-    if isempty(color_ind)
-        color_ind=1;
-    end
-%     scatter(amp_change(i),visev_change(i),[],cmap(color_ind,:));
-    scatter(1-p,visev_change(i),[],cmap(color_ind,:));
-    output.colors(i,:)=cmap(color_ind,:);
-    hold on;
 end
-colorbar;
-xlabel('amp change of suppression at led onset');
-ylabel('change in activity during visual stimulus');
-title('Want positive x and y');
 
-end
+
 
 function [psth,autocorr_out,powerOut,phaseOut]=measureAllUnitsResponseProperties(spikes,useAssigns,autocorr_window)
 
@@ -275,10 +327,3 @@ for i=1:length(allAssigns)
 end
 
 end
-
-
-    
-    
-
-
-

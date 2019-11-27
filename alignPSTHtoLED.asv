@@ -96,9 +96,7 @@ for j=1:length(psth.psths)
     if alignLEDoffTrialsToo==true
         LEDOffstartsTime=nan(1,length(ledOffTrials));
         for i=1:length(ledOffTrials)
-            [~,mi]=nanmin(abs(ledOffTrials(i)-ledOnTrials)); % find closest led on trial
-            LEDOffstartsTime(i)=LEDstartsTime(mi); % shift led off trial by same amount
-        end
+            LEDOffstartsTime(i)=LEDstartsTime(
         for i=1:length(ledOffTrials)
             currTime=LEDOffstartsTime(i);
             currTrial=ledOffTrials(i);
