@@ -2,7 +2,7 @@ function [newPSTH,ledConds,LEDmode]=alignPSTHtoLED(psth,ledLFP,ledConds,ledVal,t
 
 newPSTH=[];
 % ledThresh=2.5;
-% ledThresh=0.4;
+% ledThresh=0.2;
 ledThresh=1.5;
 alignLEDoffTrialsToo=true;
 
@@ -23,6 +23,7 @@ if length(ledConds)~=size(psth.psths{1},1)
 end
 
 LEDon=l(ismember(single(ledConds),single(ledVal)),:)>ledThresh;
+
 LEDstarts=zeros(sum(ismember(single(ledConds),single(ledVal))),1);
 ledOnTrials=find(ismember(single(ledConds),single(ledVal)));
 for i=1:size(LEDon,1)
@@ -96,7 +97,9 @@ for j=1:length(psth.psths)
     if alignLEDoffTrialsToo==true
         LEDOffstartsTime=nan(1,length(ledOffTrials));
         for i=1:length(ledOffTrials)
-            LEDOffstartsTime(i)=LEDstartsTime(
+            [~,mi]=nanmin(abs(ledOffTrials(i)-ledOnTrials)); % find closest led on trial
+            LEDOffstartsTime(i)=LEDstartsTime(mi); % shift led off trial by same amount
+        end
         for i=1:length(ledOffTrials)
             currTime=LEDOffstartsTime(i);
             currTrial=ledOffTrials(i);

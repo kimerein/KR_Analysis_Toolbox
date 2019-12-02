@@ -262,7 +262,7 @@ for i=1:length(alltheta_trialAv_noLED.low.S)
     end
 end
 sumS=sumS./tally;
-figure(); imagesc(alltheta_trialAv_noLED.t,alltheta_trialAv_noLED.f(alltheta_trialAv_noLED.f<=50),sumS(:,alltheta_trialAv_noLED.f<=30)');
+figure(); imagesc(alltheta_trialAv_noLED.t,alltheta_trialAv_noLED.f(alltheta_trialAv_noLED.f<=50),sumS(:,alltheta_trialAv_noLED.f<=50)');
 title('alltheta_trialAv_noLED ALL F1');
 save([outputDir '\' 'alltheta_trialAv_noLED ALL F1.mat'],'sumS');
 save([outputDir '\' 'UbyUalltheta_trialAv_noLED.mat'],'alltheta_trialAv_noLED');
@@ -292,7 +292,7 @@ for i=1:length(alltheta_trialAv_LED.low.S)
     end
 end
 sumS=sumS./tally;
-figure(); imagesc(alltheta_trialAv_LED.t,alltheta_trialAv_LED.f(alltheta_trialAv_LED.f<=50),sumS(:,alltheta_trialAv_LED.f<=30)');
+figure(); imagesc(alltheta_trialAv_LED.t,alltheta_trialAv_LED.f(alltheta_trialAv_LED.f<=50),sumS(:,alltheta_trialAv_LED.f<=50)');
 title('alltheta_trialAv_LED ALL F1');
 save([outputDir '\' 'alltheta_trialAv_LED ALL F1.mat'],'sumS');
 save([outputDir '\' 'UbyUalltheta_trialAv_LED.mat'],'alltheta_trialAv_LED');

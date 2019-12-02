@@ -1,10 +1,10 @@
-function [newPSTH,ledConds,LEDmode]=alignPSTHtoLED(psth,ledLFP,ledConds,ledVal,times,LEDmode)
+function [newPSTH,ledConds,LEDmode]=alignPSTHtoStim(psth,ledLFP,ledConds,ledVal,times,LEDmode)
 
 newPSTH=[];
 % ledThresh=2.5;
 ledThresh=0.2;
 % ledThresh=1.5;
-alignLEDoffTrialsToo=true;
+alignLEDoffTrialsToo=false;
 
 if iscell(ledLFP)
     l=ledLFP{1};
@@ -146,10 +146,3 @@ title('After');
 
 end
     
-        
-    
-    
-    
-    
-
-

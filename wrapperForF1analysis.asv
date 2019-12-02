@@ -1,0 +1,15 @@
+function wrapperForF1analysis(psth,trialDuration,stimBySweep,outputDir)
+
+stimConds=psth.unitStimcond{1};
+stimVal=unique(stimConds);
+
+% Align psth to vis stim
+times=linspace(0,trialDuration,size(stimBySweep,2));
+psth=alignPSTHtoStim(psth,stimBySweep,stimConds,stimVal,times,[]);
+
+% Do F1 analysis
+a=unique(psth.unitTrials{1});
+for i=1:
+
+uses={{[1]}; {[2]}; {[3]}};
+uses_tri={{a}; {a}; {a}};

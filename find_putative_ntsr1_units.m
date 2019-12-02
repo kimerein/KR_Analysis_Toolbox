@@ -48,7 +48,7 @@ switch exptType
         direct_window_long=6000; % in ms
     case 'ChR'
         direct_window_short=10; % in ms
-        direct_window_long=35; % in ms
+        direct_window_long=250; % in ms
 end
 allpsth=nanmean(psth.psths{1},1);
 for i=2:length(psth.psths)
@@ -100,7 +100,8 @@ wvfms.hw=hw; wvfms.peakToTrough=peakToTrough; wvfms.amp=amp; wvfms.spikewvfms=sp
 % Boolean test for putative Ntsr1+ unit
 switch exptType
     case 'ArchT'
-        output.putative_ntsr1_activity_pattern=(output.quick_amp_change>0 & output.quick_change_pvals<=0.05) | (output.quick_amp_change>0 & output.quick_change_pvals<=0.2 & output.visev_change<0 & output.visev_pvals<=0.05);
+        output.putative_ntsr1_activity_pattern=(output.quick_amp_change>0 & output.quick_change_pvals<=0.05) | (output.quick_amp_change>0 & output.quick_change_pvals<=0.2 & output.visev_change>0 & output.visev_pvals<=0.05);
+%         output.putative_ntsr1_activity_pattern=(output.quick_amp_change>0 & output.quick_change_pvals<=0.06) | (output.quick_amp_change>0 & output.quick_change_pvals<=0.3 & output.visev_change>0 & output.visev_pvals<=0.05);
     case 'ChR'
         output.putative_ntsr1_activity_pattern=output.quick_amp_change<0 & output.long_amp_change<0 & output.quick_change_pvals<=0.05;
 end
