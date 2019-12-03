@@ -56,6 +56,9 @@ if iscell(datadir)
             f=fieldnames(ntsr);
             for j=1:length(f)
                 temp=ntsr.(f{j});
+                if length(temp)~=length(isFs)
+                    continue
+                end
                 temp=temp(isFs==1);
                 ntsr.(f{j})=temp;
             end
