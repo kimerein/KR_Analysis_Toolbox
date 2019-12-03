@@ -90,8 +90,12 @@ switch exptType
 end
 
 % 4. Waveform half-width-at-half-max
-temp=spikes.labels(:,1);
-useAssigns=temp(spikes.labels(:,2)==2); % 2 means good unit
+if ~isfield(spikes,'labels')
+    useAssigns=unique(spikes.assigns);
+else
+    temp=spikes.labels(:,1);
+    useAssigns=temp(spikes.labels(:,2)==2); % 2 means good unit
+end
 disp('Good units:');
 disp(useAssigns);
 [hw,peakToTrough,amp,spikewvfms]=getWaveformFeatures(filtspikes(spikes,0,'assigns',useAssigns),Fs);
