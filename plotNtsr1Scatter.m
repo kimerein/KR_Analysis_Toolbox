@@ -8,6 +8,7 @@ if iscell(datadir)
     exptGrpAcrossCells=[];
     isNtsr1AcrossCells=[];
     ZdepthAcrossCells=[];
+    allUsedWvfms=[];
     for i=1:length(datadir)
         d=datadir{i};
         a=load([d '\' 'output.mat']);
@@ -50,6 +51,7 @@ if iscell(datadir)
         a=load([d '\' 'isFs.mat']);
         isFs=a.isFs;
         if takeFSInsteadOfRS==true
+            takeWvfms=wvfms.spikewvfms(isFs==1,:,:);
             classifyAsNtsr1=classifyAsNtsr1(isFs==1);
             distance_real_Z=distance_real_Z(isFs==1);
             deepenough=deepenough(isFs==1);
@@ -63,6 +65,8 @@ if iscell(datadir)
                 ntsr.(f{j})=temp;
             end
         else
+%             takeWvfms=wvfms.spikewvfms(isFs==0,:,:);
+            takeWvfms=wvfms.spikewvfms(isFs==0 & classifyAsNtsr1==1,:,:);
             classifyAsNtsr1=classifyAsNtsr1(isFs==0);
             distance_real_Z=distance_real_Z(isFs==0);
             deepenough=deepenough(isFs==0);
@@ -102,10 +106,25 @@ if iscell(datadir)
         pvalsAcrossCells=[pvalsAcrossCells ntsr.(plotThisPval)];
         isNtsr1AcrossCells=[isNtsr1AcrossCells classifyAsNtsr1];
         ZdepthAcrossCells=[ZdepthAcrossCells distance_real_Z];
+        if length(size(takeWvfms))<3
+        else
+            [~,mi]=nanmin(nanmin(takeWvfms,[],2),[],3);
+            if isempty(allUsedWvfms) || size(takeWvfms,2)==size(allUsedWvfms,2)
+                for k=1:size(takeWvfms,1)
+                    allUsedWvfms=[allUsedWvfms; reshape(takeWvfms(k,:,mi(k)),1,size(takeWvfms,2))];
+                end
+            end
+%             if (size(allUsedWvfms,2)==0) || size(takeWvfms,2)*size(takeWvfms,3)==size(allUsedWvfms,2)
+%                 allUsedWvfms=[allUsedWvfms; reshape(takeWvfms,size(takeWvfms,1),size(takeWvfms,2)*size(takeWvfms,3))];
+%             end
+        end
     end
 else
     error('expected datadir to be a cell array');
 end
+
+% Plot wvfms figure
+plotWStderr(0:1/25000:(size(allUsedWvfms,2)-1)*(1/25000),allUsedWvfms,[],'k',[],0);
 
 % Plot figure
 sz=50;
@@ -121,7 +140,7 @@ for i=1:length(ampsAcrossCells)
     if isNtsr1AcrossCells(i)==1
         m='k';
     else
-        m='w';
+        m=c;
     end
     if pvalsAcrossCells(i)<=0.05
         scatter(ampsAcrossCells(i),ZdepthAcrossCells(i),sz+10,c,'filled','MarkerEdgeColor',m,'LineWidth',1.5);
@@ -131,6 +150,32 @@ for i=1:length(ampsAcrossCells)
     hold on;
 end
 
+end
+
+function plotWStderr(x,y1,y2,c1,c2,doFill)
+
+figure();
+plot(x,nanmean(y1,1),'Color',c1);
+hold on;
+if doFill==1
+    fill([x fliplr(x)],[nanmean(y1,1)+nanstd(y1,[],1)./sqrt(size(y1,1)) fliplr(nanmean(y1,1)-nanstd(y1,[],1)./sqrt(size(y1,1)))],[0.5 0.5 0.5]);
+end
+plot(x,nanmean(y1,1),'Color',c1);
+plot(x,nanmean(y1,1)+nanstd(y1,[],1)./sqrt(size(y1,1)),'Color',c1);
+plot(x,nanmean(y1,1)-nanstd(y1,[],1)./sqrt(size(y1,1)),'Color',c1);
+
+if ~isempty(y2)
+    plot(x,nanmean(y2,1),'Color',c2);
+    if doFill==1
+        fill([x fliplr(x)],[nanmean(y2,1)+nanstd(y2,[],1)./sqrt(size(y2,1)) fliplr(nanmean(y2,1)-nanstd(y2,[],1)./sqrt(size(y2,1)))],[0.1 0.7 0.5]);
+    end
+    plot(x,nanmean(y2,1),'Color',c2);
+    plot(x,nanmean(y2,1)+nanstd(y2,[],1)./sqrt(size(y2,1)),'Color',c2);
+    plot(x,nanmean(y2,1)-nanstd(y2,[],1)./sqrt(size(y2,1)),'Color',c2);
+    
+    plot(x,nanmean(y1,1),'Color',c1);
+end
+    
 end
 
 function distance_real_Z=calcRealUnitDepth(unit_depths,topCh_wrt_bottomMostChWSpikes,ch_spacing)

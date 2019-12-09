@@ -37,8 +37,6 @@ plot(downSampAv(psth.t,10),downSampAv(nanmean(temp(ismember(single(psth.unitLED{
 title('Theta');
 legend({'led off','led on'});
 
-return
-
 plotDir=[outputDir '\'];
 
 a=load([outputDir '\noTheta_LED.mat']);
@@ -69,26 +67,26 @@ hold on;
 plot(times,F1_theta_LED(plotThisUnit,:),'Color','c');
 title('Theta');
 
-figure();
-plot(times,LFa_noTheta_noLED(plotThisUnit,:),'Color','b');
-hold on;
-plot(times,HFa_noTheta_noLED(plotThisUnit,:),'Color','r');
-title('No theta LFa vs HFa');
-legend({'low frequency alpha','high frequency alpha'});
+% figure();
+% plot(times,LFa_noTheta_noLED(plotThisUnit,:),'Color','b');
+% hold on;
+% plot(times,HFa_noTheta_noLED(plotThisUnit,:),'Color','r');
+% title('No theta LFa vs HFa');
+% legend({'low frequency alpha','high frequency alpha'});
+% 
+% figure();
+% plot(times,HFa_noTheta_noLED(plotThisUnit,:)./LFa_noTheta_noLED(plotThisUnit,:),'Color','g');
+% title('No theta ratio HFa to LFa');
+% ylim([0 3]);
 
-figure();
-plot(times,HFa_noTheta_noLED(plotThisUnit,:)./LFa_noTheta_noLED(plotThisUnit,:),'Color','g');
-title('No theta ratio HFa to LFa');
-ylim([0 3]);
-
-figure();
-plot(times,LFa_theta_noLED(plotThisUnit,:),'Color','b');
-hold on;
-plot(times,HFa_theta_noLED(plotThisUnit,:),'Color','r');
-title('Theta LFa vs HFa');
-legend({'low frequency alpha','high frequency alpha'});
-
-figure();
-plot(times,HFa_theta_noLED(plotThisUnit,:)./LFa_theta_noLED(plotThisUnit,:),'Color','g');
-title('Theta ratio HFa to LFa');
-ylim([0 3]);
+% figure();
+% plot(times,LFa_theta_noLED(plotThisUnit,:),'Color','b');
+% hold on;
+% plot(times,HFa_theta_noLED(plotThisUnit,:),'Color','r');
+% title('Theta LFa vs HFa');
+% legend({'low frequency alpha','high frequency alpha'});
+% 
+% figure();
+% plot(times,HFa_theta_noLED(plotThisUnit,:)./LFa_theta_noLED(plotThisUnit,:),'Color','g');
+% title('Theta ratio HFa to LFa');
+% ylim([0 3]);

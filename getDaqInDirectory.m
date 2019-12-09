@@ -25,6 +25,9 @@ if sortNames==1
     for i=1:length(theseAreDaqs)
         thisname=theseAreDaqs{i};
         r1=regexp(thisname,'_');
+        if length(r1)>1
+            r1=r1(2); % only for arbora's data
+        end
         r2=regexp(thisname,'\.');
         daqNum(i)=str2num(thisname(r1+1:r2-1));
     end

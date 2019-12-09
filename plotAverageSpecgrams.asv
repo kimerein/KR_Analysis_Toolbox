@@ -398,8 +398,7 @@ else
     return
 end
 
-ds=5;
-plotWStderr(downSampAv(psth_t,ds),downSampMatrix(all_noTheta_noLED_Ntsr1.psth,ds),[],'k','c',1);
+plotWStderr(psth_t,all_noTheta_noLED_Ntsr1.psth,[],'k','c',1);
 title('No theta Ntsr1');
 
 plotWStderr(psth_t,all_theta_noLED_Ntsr1.psth,[],'k','c',1);
@@ -407,10 +406,6 @@ title('Theta Ntsr1');
 
 temp1=nanmean(all_noTheta_noLED_Ntsr1.spont_spec(:,all_noTheta_noLED_Ntsr1.f>=9.5 & all_noTheta_noLED_Ntsr1.f<=16.5),2)./nanmean(all_noTheta_noLED_Ntsr1.spont_spec(:,all_noTheta_noLED_Ntsr1.f>=4 & all_noTheta_noLED_Ntsr1.f<=6.5),2);
 temp2=nanmean(all_noTheta_noLED_Ntsr1.evoked_spec(:,all_noTheta_noLED_Ntsr1.f>=9.5 & all_noTheta_noLED_Ntsr1.f<=16.5),2)./nanmean(all_noTheta_noLED_Ntsr1.evoked_spec(:,all_noTheta_noLED_Ntsr1.f>=4 & all_noTheta_noLED_Ntsr1.f<=6.5),2);
-plotComparisonLines(temp1,temp2);
-
-temp1=nanmean(all_theta_noLED_Ntsr1.spont_spec(:,all_theta_noLED_Ntsr1.f>=9.5 & all_theta_noLED_Ntsr1.f<=16.5),2)./nanmean(all_theta_noLED_Ntsr1.spont_spec(:,all_theta_noLED_Ntsr1.f>=4 & all_theta_noLED_Ntsr1.f<=6.5),2);
-temp2=nanmean(all_theta_noLED_Ntsr1.evoked_spec(:,all_theta_noLED_Ntsr1.f>=9.5 & all_theta_noLED_Ntsr1.f<=16.5),2)./nanmean(all_theta_noLED_Ntsr1.evoked_spec(:,all_theta_noLED_Ntsr1.f>=4 & all_theta_noLED_Ntsr1.f<=6.5),2);
 plotComparisonLines(temp1,temp2);
 
 temp1=nanmean(all_noTheta_noLED.spont_spec(:,all_noTheta_noLED.f>=9.5 & all_noTheta_noLED.f<=16.5),2)./nanmean(all_noTheta_noLED.spont_spec(:,all_noTheta_noLED.f>=4 & all_noTheta_noLED.f<=6.5),2);
