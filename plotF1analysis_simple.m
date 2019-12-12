@@ -1,4 +1,4 @@
-function plotF1analysis_simple(datadir,trialDuration,times,allLines)
+function output=plotF1analysis_simple(datadir,trialDuration,times,allLines)
 
 if iscell(datadir)
     all_noTheta_trialAv_noLED=[];
@@ -42,9 +42,14 @@ elseif ~isempty(datadir)
 end
 
 plotWStderr_simple(noTheta_trialAv_noLED.F1amp,theta_trialAv_noLED.F1amp,trialDuration,'k','r',times,allLines);
-plotWStderr_simple(noTheta_trialAv_noLED.F1amp,noTheta_trialAv_LED.F1amp,trialDuration,'k','b',times,allLines);
-plotWStderr_simple(theta_trialAv_noLED.F1amp,theta_trialAv_LED.F1amp,trialDuration,'r','c',times,allLines);
+[noTheta_noLED,noTheta_LED,isBigEnough]=plotWStderr_simple(noTheta_trialAv_noLED.F1amp,noTheta_trialAv_LED.F1amp,trialDuration,'k','b',times,allLines);
+[theta_noLED,theta_LED,isBigEnough]=plotWStderr_simple(theta_trialAv_noLED.F1amp,theta_trialAv_LED.F1amp,trialDuration,'r','c',times,allLines);
 plotWStderr_simple(noTheta_trialAv_noLED.F1amp,theta_trialAv_LED.F1amp,trialDuration,'k','c',times,allLines);
+
+output.noTheta_noLED=noTheta_noLED;
+output.noTheta_LED=noTheta_LED;
+output.theta_noLED=theta_noLED;
+output.theta_LED=theta_LED;
 
 end
 

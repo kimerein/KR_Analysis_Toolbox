@@ -6,19 +6,20 @@ addpath(genpath('chronux_2_11'));
 
 %% Get daq file names
 
-[theseAreDaqs,LED,Stim]=getDaqInDirectory('\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\AR2018-08-27 FF\DAQ files');
+[theseAreDaqs,LED,Stim]=getDaqInDirectory('\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-07-05\FF\DAQ files');
 
 %% Get LFP
 
 LFPchannel=2;
-[LFPbySweep,Fs,completeSweeps]=getJustLFPbySweep('\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\AR2018-08-27 FF\DAQ files\',theseAreDaqs,20000,1,[LFPchannel]);
+[LFPbySweep,Fs,completeSweeps]=getJustLFPbySweep('\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-07-05\FF\DAQ files\',theseAreDaqs,20000,1,[LFPchannel]);
 thetaDiff=getHippoTheta(LFPbySweep,zeros(1,size(LFPbySweep{1},1)),zeros(1,size(LFPbySweep{1},1)),0,0,20000);
 noThetaTrials=nanmean(thetaDiff,2)<-0.03;
 
 %% Get LED
 
-LEDchannel=22;
-[LEDbySweep]=getJustLFPbySweep('\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\AR2018-08-27 FF\DAQ files\',theseAreDaqs,20000,1,[LEDchannel]);
+% LEDchannel=22;
+LEDchannel=23;
+[LEDbySweep]=getJustLFPbySweep('\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-07-05\FF\DAQ files\',theseAreDaqs,20000,1,[LEDchannel]);
 temp=LEDbySweep{1};
 LEDon=any(temp>0.5,2);
 
@@ -96,12 +97,15 @@ plotWStderr_simple(F1_theta_noLED,F1_theta_LED,trialDuration,'k','c',times,1);
 
 %% Put together
 
-plotThisFreq=20;
-dd{1}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\AR2018-08-27 FF\T3' '\Hz' num2str(plotThisFreq)];
-dd{2}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\AR2018-08-27 FF\T4' '\Hz' num2str(plotThisFreq)];
-dd{3}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\AR2018-08-27 FF\T5' '\Hz' num2str(plotThisFreq)];
-dd{4}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\AR2018-08-27 FF\T6' '\Hz' num2str(plotThisFreq)];
-dd{5}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\AR2018-08-27 FF\T7' '\Hz' num2str(plotThisFreq)];
+plotThisFreq=6;
+dd{1}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Reversing gratings\Mawake310 good thresh\F1 analysis' '\Hz' num2str(plotThisFreq)];
+dd{2}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Reversing gratings\Mawake318 good thresh\F1 analysis' '\Hz' num2str(plotThisFreq)];
+% dd{1}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Reversing gratings\Mawake311 good thresh\F1 analysis' '\Hz' num2str(plotThisFreq)];
+% dd{2}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Reversing gratings\Mawake312 good thresh\F1 analysis' '\Hz' num2str(plotThisFreq)];
+% dd{3}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Reversing gratings\Mawake313 good thresh\F1 analysis' '\Hz' num2str(plotThisFreq)];
+% dd{4}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Reversing gratings\Mawake314 good thresh\F1 analysis' '\Hz' num2str(plotThisFreq)];
+% dd{5}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Reversing gratings\Mawake315 good thresh\F1 analysis' '\Hz' num2str(plotThisFreq)];
+% dd{6}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Reversing gratings\Mawake316 good thresh\F1 analysis' '\Hz' num2str(plotThisFreq)];
 
 allLines=0;
 plotF1analysis_simple(dd,trialDuration,times,allLines);

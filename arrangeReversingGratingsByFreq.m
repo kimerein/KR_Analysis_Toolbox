@@ -9,22 +9,22 @@ noTheta_LED=a.noTheta_trialAv_temp;
 a=load([filedir 'theta_trialAv_temp_LED.mat']);
 theta_LED=a.theta_trialAv_temp;
 
-stimconds=[1 2 3 4];
-freqs=[6 12 6 12]; % in Hz
+stimconds=[1 2 3 4 5 6];
+freqs=[6 12 6 12 6 12]; % in Hz
 unique_freqs=unique(freqs);
 for i=1:length(unique_freqs)
     currs=stimconds(ismember(freqs,unique_freqs(i)));
     for j=1:length(currs)
         if j==1
-            noTheta_trialAv_noLED=noTheta_noLED(i);
-            theta_trialAv_noLED=theta_noLED(i);
-            noTheta_trialAv_LED=noTheta_LED(i);
-            theta_trialAv_LED=theta_LED(i);
+            noTheta_trialAv_noLED=noTheta_noLED(currs(j));
+            theta_trialAv_noLED=theta_noLED(currs(j));
+            noTheta_trialAv_LED=noTheta_LED(currs(j));
+            theta_trialAv_LED=theta_LED(currs(j));
         else
-            noTheta_trialAv_noLED=addFreqResults(noTheta_trialAv_noLED,noTheta_noLED(i));
-            theta_trialAv_noLED=addFreqResults(theta_trialAv_noLED,theta_noLED(i));
-            noTheta_trialAv_LED=addFreqResults(noTheta_trialAv_LED,noTheta_LED(i));
-            theta_trialAv_LED=addFreqResults(theta_trialAv_LED,theta_LED(i));
+            noTheta_trialAv_noLED=addFreqResults(noTheta_trialAv_noLED,noTheta_noLED(currs(j)));
+            theta_trialAv_noLED=addFreqResults(theta_trialAv_noLED,theta_noLED(currs(j)));
+            noTheta_trialAv_LED=addFreqResults(noTheta_trialAv_LED,noTheta_LED(currs(j)));
+            theta_trialAv_LED=addFreqResults(theta_trialAv_LED,theta_LED(currs(j)));
         end    
     end
     noTheta_trialAv_noLED=divideFreqResults(noTheta_trialAv_noLED,length(currs));
@@ -47,15 +47,20 @@ end
 
 function summed=addFreqResults(existing,new)
 
-summed.HFa=existing.HFa+new.HFa;
-summed.LFa=existing.LFa+new.LFa;
-summed.F1amp=existing.F1amp+new.F1amp;
-summed.allpower=existing.allpower+new.allpower;
+temp=cat(3,existing.HFa,new.HFa);
+summed.HFa=nansum(temp,3);
+temp=cat(3,existing.LFa,new.LFa);
+summed.LFa=nansum(temp,3);
+temp=cat(3,existing.F1amp,new.F1amp);
+summed.F1amp=nansum(temp,3);
+temp=cat(3,existing.allpower,new.allpower);
+summed.allpower=nansum(temp,3);
 
 summed.allS.t=existing.allS.t;
 summed.allS.f=existing.allS.f;
 for i=1:length(existing.allS.S)
-    summed.allS.S{i}=existing.allS.S{i}+new.allS.S{i};
+    temp=cat(3,existing.allS.S{i},new.allS.S{i});
+    summed.allS.S{i}=nansum(temp,3);
 end
 
 end

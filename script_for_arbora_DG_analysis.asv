@@ -125,17 +125,11 @@ dd{7}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gt
 dd{8}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-07-05\Sorted units F1 analysis\T6';
 dd{9}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-07-05\Sorted units F1 analysis\T7';
 
-dd{10}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-07-07\DG\Sorted units F1 analysis\T3';
-dd{11}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-07-07\DG\Sorted units F1 analysis\T4';
-dd{12}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-07-07\DG\Sorted units F1 analysis\T5';
-dd{13}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-07-07\DG\Sorted units F1 analysis\T6';
-dd{14}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-07-07\DG\Sorted units F1 analysis\T7';
-
-dd{15}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-08-14\DG analyzed\Sorted units F1 analysis\T3';
-dd{16}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-08-14\DG analyzed\Sorted units F1 analysis\T4';
-dd{17}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-08-14\DG analyzed\Sorted units F1 analysis\T5';
-dd{18}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-08-14\DG analyzed\Sorted units F1 analysis\T6';
-dd{19}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-08-14\DG analyzed\Sorted units F1 analysis\T7';
+dd{5}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-07-07\DG\Sorted units F1 analysis\T3';
+dd{2}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-07-07\DG\Sorted units F1 analysis\T4';
+dd{3}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-07-07\DG\Sorted units F1 analysis\T5';
+dd{4}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-07-07\DG\Sorted units F1 analysis\T6';
+dd{5}='\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-07-07\DG\Sorted units F1 analysis\T7';
 
 allLines=0;
 plotF1analysis_simple(dd,trialDuration,times,allLines);
