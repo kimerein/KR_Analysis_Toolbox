@@ -1,14 +1,17 @@
 function [data1,data2,isBigEnough]=plotWStderr_simple(data1,data2,trialDuration,c1,c2,times,allLines)
 
 norm=0;
-% normWindow=[1 3];
-normWindow=[3 6];
+normWindow=[1 3];
+% normWindow=[3 6];
 % normWindow=[1.5 4];
 baseSubtract=1;
 % baseWindow=[0 0.7];
 % baseWindow=[0 2.3];
 % baseWindow=[0.5 1.2];
-baseWindow=[0 3];
+% baseWindow=[0 3];
+baseWindow=[0.3 1];
+% baseWindow=[0.5 0.78];
+% baseWindow=[1.5 3];
 % baseWindow=[3 3.7];
 ds=1;
 doFill=1;
@@ -25,9 +28,10 @@ if baseSubtract==1
     end
 end
 
-% thresh=2*10^4; 
-% % thresh=0.25*10^4;
-% thresh=0.4*10^4;
+% % thresh=2*10^4; 
+% % thresh=0.6*10^4; 
+% thresh=0.25*10^4;
+% % thresh=0.4*10^4;
 % % thresh=3.5*10^4;
 % % thresh=0.44*10^4; % for 4 Hz
 % % thresh=0.10*10^4; % for 14 Hz
@@ -40,9 +44,9 @@ end
 % data1=data1(isBigEnough,:);
 % data2=data2(isBigEnough,:);
 % disp(sum(isBigEnough==1));
-
-% % baseWindow=[0.51 1]; % for LOW FREQ
-% % baseWindow=[0.9 1]; % for HIGH FREQ
+ 
+% baseWindow=[0.51 1]; % for LOW FREQ
+% baseWindow=[0.9 1]; % for HIGH FREQ
 
 if norm==1
     for i=1:size(data1,1)

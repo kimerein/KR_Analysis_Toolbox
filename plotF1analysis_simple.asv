@@ -1,10 +1,18 @@
 function output=plotF1analysis_simple(datadir,trialDuration,times,allLines)
 
+getSpecgrams=true;
+
 if iscell(datadir)
     all_noTheta_trialAv_noLED=[];
     all_noTheta_trialAv_LED=[];
     all_theta_trialAv_noLED=[];
     all_theta_trialAv_LED=[];
+    
+    if getSpecgrams==true
+        all_noTheta_trialAv_noLED.S=[];
+        
+        
+    end
     
     for i=1:length(datadir)
         d=datadir{i};

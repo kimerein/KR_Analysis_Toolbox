@@ -1,8 +1,10 @@
 function [output,wvfms,psth]=find_putative_ntsr1_units(spikes,psth,LEDbySweep,ledConds,taketri,ledVal,trialDuration,Fs,exptType)
 
 % baseline_window=[0 3]; % in seconds from trial onset
-baseline_window=[0 1]; % in seconds from trial onset
-stimWindow=[4 6.5]; % in seconds from trial onset
+% baseline_window=[0 1]; % in seconds from trial onset
+% stimWindow=[4 6.5]; % in seconds from trial onset
+baseline_window=[0 0.5]; % in seconds from trial onset
+stimWindow=[1 3]; % in seconds from trial onset
 
 % Analyze the following:
 % 1. Amplitude of the change from baseline during the first (default) 35-45 ms after
@@ -38,7 +40,7 @@ if ~isempty(LEDbySweep)
     %psth=realignBaseline(psth,baseline_window,ledVal,times);
 else
     times=psth.t;
-    ledStart=3.2;
+    ledStart=0.5;
 end
 
 % Check baseline_window and stimWindow

@@ -1,6 +1,6 @@
 function plotHighVsLowFrequencyUnitActivity(psth,plotThisUnit,noLEDvals,LEDvals,outputDir,noThetaTrials,takeTri)
 
-ds=5;
+ds=4;
 
 if ~isempty(takeTri)
     for i=1:length(psth.psths)
@@ -24,6 +24,8 @@ if ~isempty(takeTri)
 end
 
 temp=psth.psths{plotThisUnit}; 
+for i=1:size(temp,1)
+    temp(i,:)=smooth(temp(i,psth.t>0 & psth.t<3),10);
 figure(); 
 plot(downSampAv(psth.t,ds),smooth(downSampAv(nanmean(temp(ismember(single(psth.unitLED{plotThisUnit}),single(noLEDvals)) & noThetaTrials'==1,:),1),ds),3),'Color','k'); 
 hold on; 
@@ -32,6 +34,7 @@ title('No theta');
 legend({'led off','led on'});
 
 temp=psth.psths{plotThisUnit}; 
+temp=smooth(temp(:,psth.t>0 & psth.t<3),10);
 figure(); 
 plot(downSampAv(psth.t,ds),smooth(downSampAv(nanmean(temp(ismember(single(psth.unitLED{plotThisUnit}),single(noLEDvals)) & noThetaTrials'==0,:),1),ds),3),'Color','k'); 
 hold on; 

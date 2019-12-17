@@ -22,11 +22,11 @@ F1range=[2.5 3.5];
 allrange=[10 99.5];
 % avBeforeSpec=1;
 
-% movingwin=[1 0.05]; % v1
+movingwin=[1 0.05]; % v1
 % movingwin=[0.165 0.025];
-movingwin=2*[0.165 0.025];
+% movingwin=2*[0.165 0.025];
 params.tapers=[5 6]; % v1
-params.tapers=[0.9 2 0];
+% params.tapers=[0.9 2 0];
 % params.tapers=[3 5];
 params.Fs=1/(psth1.t(2)-psth1.t(1));
 % params.fpass=[1 30];

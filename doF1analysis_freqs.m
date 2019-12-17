@@ -344,6 +344,8 @@ for i=1:length(uses)
     end    
     [noTheta_trialAv_temp(i).allS,noTheta_trialAv_temp(i).HFa,noTheta_trialAv_temp(i).LFa,noTheta_trialAv_temp(i).F1amp,noTheta_trialAv_temp(i).allpower]=getHFandLFalphaResponses(allcurr_psth,ones(length(allcurr_psth.psths),1),zeros(length(allcurr_psth.psths),1),1,usealls,usel,freqs(i));
     [theta_trialAv_temp(i).allS,theta_trialAv_temp(i).HFa,theta_trialAv_temp(i).LFa,theta_trialAv_temp(i).F1amp,theta_trialAv_temp(i).allpower]=getHFandLFalphaResponses(allcurr_psth_theta,ones(length(allcurr_psth_theta.psths),1),zeros(length(allcurr_psth_theta.psths),1),1,usealls,usel,freqs(i));
+%     [noTheta_trialAv_temp(i).allS,noTheta_trialAv_temp(i).HFa,noTheta_trialAv_temp(i).LFa,noTheta_trialAv_temp(i).F1amp,noTheta_trialAv_temp(i).allpower]=getHFandLFalphaResponses(allcurr_psth,ones(length(allcurr_psth.psths),1),zeros(length(allcurr_psth.psths),1),0,usealls,usel,freqs(i));
+%     [theta_trialAv_temp(i).allS,theta_trialAv_temp(i).HFa,theta_trialAv_temp(i).LFa,theta_trialAv_temp(i).F1amp,theta_trialAv_temp(i).allpower]=getHFandLFalphaResponses(allcurr_psth_theta,ones(length(allcurr_psth_theta.psths),1),zeros(length(allcurr_psth_theta.psths),1),0,usealls,usel,freqs(i));
 end
 save([outputDir '\' 'noTheta_trialAv_temp_noLED.mat'],'noTheta_trialAv_temp');
 save([outputDir '\' 'theta_trialAv_temp_noLED.mat'],'theta_trialAv_temp');
@@ -382,6 +384,8 @@ for i=1:length(uses)
     end    
     [noTheta_trialAv_temp(i).allS,noTheta_trialAv_temp(i).HFa,noTheta_trialAv_temp(i).LFa,noTheta_trialAv_temp(i).F1amp,noTheta_trialAv_temp(i).allpower]=getHFandLFalphaResponses(allcurr_psth,ones(length(allcurr_psth.psths),1),zeros(length(allcurr_psth.psths),1),1,usealls,usel,freqs(i));
     [theta_trialAv_temp(i).allS,theta_trialAv_temp(i).HFa,theta_trialAv_temp(i).LFa,theta_trialAv_temp(i).F1amp,theta_trialAv_temp(i).allpower]=getHFandLFalphaResponses(allcurr_psth_theta,ones(length(allcurr_psth_theta.psths),1),zeros(length(allcurr_psth_theta.psths),1),1,usealls,usel,freqs(i));
+%     [noTheta_trialAv_temp(i).allS,noTheta_trialAv_temp(i).HFa,noTheta_trialAv_temp(i).LFa,noTheta_trialAv_temp(i).F1amp,noTheta_trialAv_temp(i).allpower]=getHFandLFalphaResponses(allcurr_psth,ones(length(allcurr_psth.psths),1),zeros(length(allcurr_psth.psths),1),0,usealls,usel,freqs(i));
+%     [theta_trialAv_temp(i).allS,theta_trialAv_temp(i).HFa,theta_trialAv_temp(i).LFa,theta_trialAv_temp(i).F1amp,theta_trialAv_temp(i).allpower]=getHFandLFalphaResponses(allcurr_psth_theta,ones(length(allcurr_psth_theta.psths),1),zeros(length(allcurr_psth_theta.psths),1),0,usealls,usel,freqs(i));
 end
 save([outputDir '\' 'noTheta_trialAv_temp_LED.mat'],'noTheta_trialAv_temp');
 save([outputDir '\' 'theta_trialAv_temp_LED.mat'],'theta_trialAv_temp');
@@ -479,11 +483,13 @@ end
 allrange=[10 99.5];
 % avBeforeSpec=1;
 
-% movingwin=[1 0.05]; v1
+movingwin=[1 0.05]; % v1
 % movingwin=[0.165 0.025];
-movingwin=2*[0.165 0.025];
-% params.tapers=[5 6]; v1
-params.tapers=[3 5];
+% movingwin=2*[0.165 0.025]; % used
+% params.tapers=[5 6]; % v1
+% params.tapers=[3 5]; % used
+params.tapers=[0.9 2 0];
+
 params.Fs=1/(psth1.t(2)-psth1.t(1));
 % params.fpass=[1 30];
 params.fpass=[1 100];

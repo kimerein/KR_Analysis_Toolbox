@@ -315,11 +315,6 @@ if iscell(datadir)
                         all_noTheta_LED_Ntsr1.LFa=[all_noTheta_LED_Ntsr1.LFa; noTheta_LED.LFa(:,1:size(all_noTheta_LED_Ntsr1.LFa,2))];
                         all_theta_noLED_Ntsr1.LFa=[all_theta_noLED_Ntsr1.LFa; theta_noLED.LFa(:,1:size(all_theta_noLED_Ntsr1.LFa,2))];
                         all_theta_LED_Ntsr1.LFa=[all_theta_LED_Ntsr1.LFa; theta_LED.LFa(:,1:size(all_theta_LED_Ntsr1.LFa,2))];
-                        
-                        all_noTheta_noLED_Ntsr1.F1amp=[all_noTheta_noLED_Ntsr1.F1amp; noTheta_noLED.F1amp(:,1:size(all_noTheta_noLED_Ntsr1.F1amp,2))];
-                        all_noTheta_LED_Ntsr1.F1amp=[all_noTheta_LED_Ntsr1.F1amp; noTheta_LED.F1amp(:,1:size(all_noTheta_LED_Ntsr1.F1amp,2))];
-                        all_theta_noLED_Ntsr1.F1amp=[all_theta_noLED_Ntsr1.F1amp; theta_noLED.F1amp(:,1:size(all_theta_noLED_Ntsr1.F1amp,2))];
-                        all_theta_LED_Ntsr1.F1amp=[all_theta_LED_Ntsr1.F1amp; theta_LED.F1amp(:,1:size(all_theta_LED_Ntsr1.F1amp,2))];
                     elseif size(noTheta_noLED.HFa,2)<size(all_noTheta_noLED_Ntsr1.HFa,2)
                         all_noTheta_noLED_Ntsr1.HFa=[all_noTheta_noLED_Ntsr1.HFa; [noTheta_noLED.HFa nan(size(noTheta_noLED.HFa,1),size(all_noTheta_noLED_Ntsr1.HFa,2)-size(noTheta_noLED.HFa,2))]];
                         all_noTheta_LED_Ntsr1.HFa=[all_noTheta_LED_Ntsr1.HFa; [noTheta_LED.HFa nan(size(noTheta_LED.HFa,1),size(all_noTheta_LED_Ntsr1.HFa,2)-size(noTheta_LED.HFa,2))]];
@@ -330,11 +325,6 @@ if iscell(datadir)
                         all_noTheta_LED_Ntsr1.LFa=[all_noTheta_LED_Ntsr1.LFa; [noTheta_LED.LFa nan(size(noTheta_LED.LFa,1),size(all_noTheta_LED_Ntsr1.LFa,2)-size(noTheta_LED.LFa,2))]];
                         all_theta_noLED_Ntsr1.LFa=[all_theta_noLED_Ntsr1.LFa; [theta_noLED.LFa nan(size(theta_noLED.LFa,1),size(all_theta_noLED_Ntsr1.LFa,2)-size(theta_noLED.LFa,2))]];
                         all_theta_LED_Ntsr1.LFa=[all_theta_LED_Ntsr1.LFa; [theta_LED.LFa nan(size(theta_LED.LFa,1),size(all_theta_LED_Ntsr1.LFa,2)-size(theta_LED.LFa,2))]];
-                        
-                        all_noTheta_noLED_Ntsr1.F1amp=[all_noTheta_noLED_Ntsr1.F1amp; [noTheta_noLED.F1amp nan(size(noTheta_noLED.LFF1ampa,1),size(all_noTheta_noLED_Ntsr1.F1amp,2)-size(noTheta_noLED.F1amp,2))]];
-                        all_noTheta_LED_Ntsr1.F1amp=[all_noTheta_LED_Ntsr1.F1amp; [noTheta_LED.F1amp nan(size(noTheta_LED.F1amp,1),size(all_noTheta_LED_Ntsr1.F1amp,2)-size(noTheta_LED.F1amp,2))]];
-                        all_theta_noLED_Ntsr1.F1amp=[all_theta_noLED_Ntsr1.F1amp; [theta_noLED.F1amp nan(size(theta_noLED.F1amp,1),size(all_theta_noLED_Ntsr1.F1amp,2)-size(theta_noLED.F1amp,2))]];
-                        all_theta_LED_Ntsr1.F1amp=[all_theta_LED_Ntsr1.F1amp; [theta_LED.F1amp nan(size(theta_LED.F1amp,1),size(all_theta_LED_Ntsr1.F1amp,2)-size(theta_LED.F1amp,2))]];
                     end   
                 else
                     if isFs(j)==takeFSForNonNtsr1
@@ -379,11 +369,6 @@ if iscell(datadir)
                             all_noTheta_LED.LFa=[all_noTheta_LED.LFa; noTheta_LED.LFa(:,1:size(all_noTheta_LED.LFa,2))];
                             all_theta_noLED.LFa=[all_theta_noLED.LFa; theta_noLED.LFa(:,1:size(all_theta_noLED.LFa,2))];
                             all_theta_LED.LFa=[all_theta_LED.LFa; theta_LED.LFa(:,1:size(all_theta_LED.LFa,2))];
-
-                            all_noTheta_noLED.F1amp=[all_noTheta_noLED.F1amp; noTheta_noLED.F1amp(:,1:size(all_noTheta_noLED.F1amp,2))];
-                            all_noTheta_LED.F1amp=[all_noTheta_LED.F1amp; noTheta_LED.F1amp(:,1:size(all_noTheta_LED.F1amp,2))];
-                            all_theta_noLED.F1amp=[all_theta_noLED.F1amp; theta_noLED.F1amp(:,1:size(all_theta_noLED.F1amp,2))];
-                            all_theta_LED.F1amp=[all_theta_LED.F1amp; theta_LED.F1amp(:,1:size(all_theta_LED.F1amp,2))];
                         elseif size(noTheta_noLED.HFa,2)<size(all_noTheta_noLED.HFa,2)
                             all_noTheta_noLED.HFa=[all_noTheta_noLED.HFa; [noTheta_noLED.HFa nan(size(noTheta_noLED.HFa,1),size(all_noTheta_noLED.HFa,2)-size(noTheta_noLED.HFa,2))]];
                             all_noTheta_LED.HFa=[all_noTheta_LED.HFa; [noTheta_LED.HFa nan(size(noTheta_LED.HFa,1),size(all_noTheta_LED.HFa,2)-size(noTheta_LED.HFa,2))]];
@@ -394,11 +379,6 @@ if iscell(datadir)
                             all_noTheta_LED.LFa=[all_noTheta_LED.LFa; [noTheta_LED.LFa nan(size(noTheta_LED.LFa,1),size(all_noTheta_LED.LFa,2)-size(noTheta_LED.LFa,2))]];
                             all_theta_noLED.LFa=[all_theta_noLED.LFa; [theta_noLED.LFa nan(size(theta_noLED.LFa,1),size(all_theta_noLED.LFa,2)-size(theta_noLED.LFa,2))]];
                             all_theta_LED.LFa=[all_theta_LED.LFa; [theta_LED.LFa nan(size(theta_LED.LFa,1),size(all_theta_LED.LFa,2)-size(theta_LED.LFa,2))]];
-                            
-                            all_noTheta_noLED.F1amp=[all_noTheta_noLED.F1amp; [noTheta_noLED.F1amp nan(size(noTheta_noLED.F1amp,1),size(all_noTheta_noLED.F1amp,2)-size(noTheta_noLED.F1amp,2))]];
-                            all_noTheta_LED.F1amp=[all_noTheta_LED.F1amp; [noTheta_LED.F1amp nan(size(noTheta_LED.F1amp,1),size(all_noTheta_LED.F1amp,2)-size(noTheta_LED.F1amp,2))]];
-                            all_theta_noLED.F1amp=[all_theta_noLED.F1amp; [theta_noLED.F1amp nan(size(theta_noLED.F1amp,1),size(all_theta_noLED.F1amp,2)-size(theta_noLED.F1amp,2))]];
-                            all_theta_LED.F1amp=[all_theta_LED.F1amp; [theta_LED.F1amp nan(size(theta_LED.F1amp,1),size(all_theta_LED.F1amp,2)-size(theta_LED.F1amp,2))]];
                         end
                     end
                 end
@@ -419,12 +399,12 @@ else
 end
 
 ds=1;
-plotWStderr(downSampAv(psth_t,ds),downSampMatrix(all_noTheta_noLED_Ntsr1.F1amp,ds),[],'k','c',1);
-title('No theta Ntsr1 F1 amp');
+plotWStderr(downSampAv(psth_t,ds),downSampMatrix(all_noTheta_noLED_Ntsr1.psth,ds),[],'k','c',1);
+title('No theta Ntsr1');
 
-ds=1;
-plotWStderr(downSampAv(psth_t,ds),downSampMatrix(all_theta_noLED_Ntsr1.F1amp,ds),[],'k','c',1);
-title('Theta Ntsr1 F1 amp');
+ds=5;
+plotWStderr(downSampAv(psth_t,ds),downSampMatrix(all_noTheta_noLED_Ntsr1.psth,ds),[],'k','c',1);
+title('No theta Ntsr1');
 
 ds=5;
 plotWStderr(downSampAv(psth_t,ds),downSampMatrix(all_noTheta_noLED_Ntsr1.psth,ds),[],'k','c',1);

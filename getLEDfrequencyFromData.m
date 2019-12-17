@@ -1,4 +1,4 @@
-function getLEDfrequencyFromData(LEDbySweep,Fs)
+function LED=getLEDfrequencyFromData(LEDbySweep,Fs)
 
 rmpath(genpath('chronux_2_11'));
 
@@ -16,4 +16,4 @@ for i=1:size(L,1)
     peak_counts(i)=length(findpeaks(curr(times>stimWindow(1) & times<stimWindow(1)+1),Fs,'MinPeakHeight',peakThresh,'MinPeakDistance',minTimeDiff,'MinPeakProminence',0.5));
 end
 
-pause;
+LED=peak_counts;
