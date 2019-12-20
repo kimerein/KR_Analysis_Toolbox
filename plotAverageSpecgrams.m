@@ -331,7 +331,7 @@ if iscell(datadir)
                         all_theta_noLED_Ntsr1.LFa=[all_theta_noLED_Ntsr1.LFa; [theta_noLED.LFa nan(size(theta_noLED.LFa,1),size(all_theta_noLED_Ntsr1.LFa,2)-size(theta_noLED.LFa,2))]];
                         all_theta_LED_Ntsr1.LFa=[all_theta_LED_Ntsr1.LFa; [theta_LED.LFa nan(size(theta_LED.LFa,1),size(all_theta_LED_Ntsr1.LFa,2)-size(theta_LED.LFa,2))]];
                         
-                        all_noTheta_noLED_Ntsr1.F1amp=[all_noTheta_noLED_Ntsr1.F1amp; [noTheta_noLED.F1amp nan(size(noTheta_noLED.LFF1ampa,1),size(all_noTheta_noLED_Ntsr1.F1amp,2)-size(noTheta_noLED.F1amp,2))]];
+                        all_noTheta_noLED_Ntsr1.F1amp=[all_noTheta_noLED_Ntsr1.F1amp; [noTheta_noLED.F1amp nan(size(noTheta_noLED.F1amp,1),size(all_noTheta_noLED_Ntsr1.F1amp,2)-size(noTheta_noLED.F1amp,2))]];
                         all_noTheta_LED_Ntsr1.F1amp=[all_noTheta_LED_Ntsr1.F1amp; [noTheta_LED.F1amp nan(size(noTheta_LED.F1amp,1),size(all_noTheta_LED_Ntsr1.F1amp,2)-size(noTheta_LED.F1amp,2))]];
                         all_theta_noLED_Ntsr1.F1amp=[all_theta_noLED_Ntsr1.F1amp; [theta_noLED.F1amp nan(size(theta_noLED.F1amp,1),size(all_theta_noLED_Ntsr1.F1amp,2)-size(theta_noLED.F1amp,2))]];
                         all_theta_LED_Ntsr1.F1amp=[all_theta_LED_Ntsr1.F1amp; [theta_LED.F1amp nan(size(theta_LED.F1amp,1),size(all_theta_LED_Ntsr1.F1amp,2)-size(theta_LED.F1amp,2))]];
@@ -419,22 +419,18 @@ else
 end
 
 ds=1;
-plotWStderr(downSampAv(psth_t,ds),downSampMatrix(all_noTheta_noLED_Ntsr1.F1amp,ds),[],'k','c',1);
+y1_noTheta=plotWStderr(downSampAv(all_noTheta_noLED_Ntsr1.t,ds),downSampMatrix(all_noTheta_noLED_Ntsr1.F1amp,ds),[],'k','c',1);
 title('No theta Ntsr1 F1 amp');
 
 ds=1;
-plotWStderr(downSampAv(psth_t,ds),downSampMatrix(all_theta_noLED_Ntsr1.F1amp,ds),[],'k','c',1);
+y1_theta=plotWStderr(downSampAv(all_noTheta_noLED_Ntsr1.t,ds),downSampMatrix(all_theta_noLED_Ntsr1.F1amp,ds),[],'k','c',1);
 title('Theta Ntsr1 F1 amp');
 
 ds=5;
 plotWStderr(downSampAv(psth_t,ds),downSampMatrix(all_noTheta_noLED_Ntsr1.psth,ds),[],'k','c',1);
 title('No theta Ntsr1');
 
-ds=5;
-plotWStderr(downSampAv(psth_t,ds),downSampMatrix(all_noTheta_noLED_Ntsr1.psth,ds),[],'k','c',1);
-title('No theta Ntsr1');
-
-plotWStderr(psth_t,all_theta_noLED_Ntsr1.psth,[],'k','c',1);
+plotWStderr(downSampAv(psth_t,ds),downSampMatrix(all_theta_noLED_Ntsr1.psth,ds),[],'k','c',1);
 title('Theta Ntsr1');
 
 temp1=nanmean(all_noTheta_noLED_Ntsr1.spont_spec(:,all_noTheta_noLED_Ntsr1.f>=9.5 & all_noTheta_noLED_Ntsr1.f<=16.5),2)./nanmean(all_noTheta_noLED_Ntsr1.spont_spec(:,all_noTheta_noLED_Ntsr1.f>=4 & all_noTheta_noLED_Ntsr1.f<=6.5),2);
@@ -541,14 +537,116 @@ title('Theta no LED, Ratio LF to HF -- Ntsr1 vs Non-Ntsr1');
 
 figure(); 
 temp=all_noTheta_noLED_Ntsr1.S(~isnan(all_noTheta_noLED_Ntsr1.t) & all_noTheta_noLED_Ntsr1.t<=cutToMaxTime & all_noTheta_noLED_Ntsr1.t>=cutToMinTime,all_noTheta_noLED_Ntsr1.f<=50);
+temp(:,1:3)=temp(:,1:3).*0.17.*(0.7225/0.1121);
+temp(:,4)=temp(:,4).*0.73.*(0.7225/0.5035);
 temp=temp-repmat(nanmin(temp,[],2),1,size(temp,2));
 temp=temp./repmat(nanmax(temp,[],2),1,size(temp,2));
 imagesc(downSampAv(all_noTheta_noLED_Ntsr1.t(~isnan(all_noTheta_noLED_Ntsr1.t) & all_noTheta_noLED_Ntsr1.t<=cutToMaxTime & all_noTheta_noLED_Ntsr1.t>=cutToMinTime),1),all_noTheta_noLED_Ntsr1.f(all_noTheta_noLED_Ntsr1.f<=50),downSampMatrix(temp',1));
 title('noTheta noLED Ntsr1 normalized');
 
-dataInt=interp2(temp,4);
-figure();
-imagesc(all_noTheta_noLED_Ntsr1.t(~isnan(all_noTheta_noLED_Ntsr1.t) & all_noTheta_noLED_Ntsr1.t<=cutToMaxTime & all_noTheta_noLED_Ntsr1.t>=cutToMinTime),all_noTheta_noLED_Ntsr1.f(all_noTheta_noLED_Ntsr1.f<=50),dataInt');
+% dataInt=interp2(temp,4);
+% figure();
+% imagesc(all_noTheta_noLED_Ntsr1.t(~isnan(all_noTheta_noLED_Ntsr1.t) & all_noTheta_noLED_Ntsr1.t<=cutToMaxTime & all_noTheta_noLED_Ntsr1.t>=cutToMinTime),all_noTheta_noLED_Ntsr1.f(all_noTheta_noLED_Ntsr1.f<=50),dataInt');
+% 
+% tempie=[nan(4,size(allVisBaseSubByFreq_noTheta,2)+8); [nan(size(allVisBaseSubByFreq_noTheta,1),4) allVisBaseSubByFreq_noTheta nan(size(allVisBaseSubByFreq_noTheta,1),4)]; nan(4,size(allVisBaseSubByFreq_noTheta,2)+8)];
+% K=ones([5 5]); figure(); imagesc(interp2(conv2(tempie,K),4)');
+% temp=conv2(tempie,K);
+% temp=temp(1:end-1,1:end-1);
+% temp=interp2(temp,4);
+% 
+% F1power_all=temp;
+% 
+% tempie=[nan(4,size(p_noTheta',2)+8); [nan(size(p_noTheta',1),4) p_noTheta' nan(size(p_noTheta',1),4)]; nan(4,size(p_noTheta',2)+8)];
+% K=ones([5 5]); figure(); imagesc(interp2(conv2(tempie,K),4)');
+% temp=conv2(tempie,K);
+% temp=temp(1:end-1,1:end-1);
+% temp=interp2(temp,4);
+% 
+% p_all=temp;
+% 
+% temperfid=F1power_all; 
+% % temperfid(p_all>3*4.1532)=nanmean(nanmean(F1power_all)); % no theta
+% % temperfid(p_all>23.1375)=nanmean(nanmean(F1power_all)); % theta
+% temperfid(p_all>15.16)=nanmean(nanmean(F1power_all)); % no theta
+% figure(); 
+% imagesc(conv2(temperfid,K,'same')');
+% 
+% temp=temperfid;
+% 
+% bin1_temp=nanmean(temp(112+1:112+12,:),1);
+% bin2_temp=nanmean(temp(112+13:112+13+12,:),1);
+% bin3_temp=nanmean(temp(112+13+12:112+13+2*12,:),1);
+% bin4_temp=nanmean(temp(112+13+2*12:112+13+3*12,:),1);
+% bin5_temp=nanmean(temp(112+13+3*12:112+13+4*12,:),1);
+% bin6_temp=nanmean(temp(112+13+4*12:112+13+5*12,:),1);
+% bin7_temp=nanmean(temp(112+13+5*12:112+13+6*12,:),1);
+% bin8_temp=nanmean(temp(112+13+6*12:112+13+7*12,:),1);
+% bin9_temp=nanmean(temp(112+13+7*12:112+13+8*12,:),1);
+% bin10_temp=nanmean(temp(112+13+8*12:112+13+9*12,:),1);
+% bin11_temp=nanmean(temp(112+13+9*12:112+13+10*12,:),1);
+% bin12_temp=nanmean(temp(112+13+10*12:112+13+11*12,:),1);
+% bin13_temp=nanmean(temp(112+13+11*12:112+13+12*12,:),1);
+% bin14_temp=nanmean(temp(112+13+12*12:112+13+13*12,:),1);
+% bin15_temp=nanmean(temp(112+13+13*12:end-112-1,:),1);
+% 
+% all(1:12,:)=repmat(bin1_temp,12,1);
+% all(13:13+12-1,:)=repmat(bin2_temp,12,1);
+% all(13+12:13+12+8-1,:)=repmat(bin3_temp,8,1);
+% all(13+12+8:13+12+8+6-1,:)=repmat(bin4_temp,6,1);
+% all(13+12+8+6:13+12+8+6+2-1,:)=repmat(bin5_temp,2,1);
+% all(13+12+8+6+2:13+12+8+6+2+4-1,:)=repmat(bin6_temp,4,1);
+% all(13+12+8+6+2+4:13+12+8+6+2+4+3-1,:)=repmat(bin7_temp,3,1);
+% all(13+12+8+6+2+4+3:13+12+8+6+2+4+3+2-1,:)=repmat(bin8_temp,2,1);
+% all(13+12+8+6+2+4+3+2:13+12+8+6+2+4+3+2+1-1,:)=repmat(bin9_temp,1,1);
+% all(13+12+8+6+2+4+3+2+1:13+12+8+6+2+4+3+2+1+1-1,:)=repmat(bin10_temp,1,1);
+% all(13+12+8+6+2+4+3+2+1+1:13+12+8+6+2+4+3+2+1+1+7-1,:)=repmat(bin11_temp,7,1);
+% all(13+12+8+6+2+4+3+2+1+1+7:13+12+8+6+2+4+3+2+1+1+7+5-1,:)=repmat(bin12_temp,5,1);
+% all(13+12+8+6+2+4+3+2+1+1+7+5:13+12+8+6+2+4+3+2+1+1+7+5+4-1,:)=repmat(bin13_temp,4,1);
+% all(13+12+8+6+2+4+3+2+1+1+7+5+4:13+12+8+6+2+4+3+2+1+1+7+5+4+3-1,:)=repmat(bin14_temp,3,1);
+% all(13+12+8+6+2+4+3+2+1+1+7+5+4+3:13+12+8+6+2+4+3+2+1+1+7+5+4+3+2-1,:)=repmat(bin15_temp,2,1);
+
+
+
+% all(1,:)=bin1_temp;
+% all(2,:)=bin2_temp;
+% all(3,:)=bin2_temp;
+% all(4,:)=bin3_temp;
+% all(5,:)=bin3_temp;
+% all(6,:)=bin4_temp;
+% all(7,:)=bin4_temp;
+% all(8,:)=bin5_temp;
+% all(9,:)=bin5_temp;
+% all(10,:)=bin6_temp;
+% all(11,:)=bin6_temp;
+% all(12,:)=bin7_temp;
+% all(13,:)=bin7_temp;
+% all(14,:)=bin8_temp;
+% all(15,:)=bin8_temp;
+% all(16,:)=bin9_temp;
+% all(17,:)=bin9_temp;
+% all(18,:)=bin10_temp;
+% all(19,:)=bin10_temp;
+% all(20,:)=bin11_temp;
+% all(21,:)=bin11_temp;
+% all(22,:)=bin11_temp;
+% all(23,:)=bin11_temp;
+% all(24,:)=bin11_temp;
+% all(25,:)=bin11_temp;
+% all(26,:)=bin11_temp;
+% all(27,:)=bin11_temp;
+% all(28,:)=bin11_temp;
+% all(29,:)=bin11_temp;
+% all(30,:)=bin12_temp;
+% all(31,:)=bin12_temp;
+% all(32,:)=bin12_temp;
+% all(33,:)=bin12_temp;
+% all(34,:)=bin12_temp;
+% all(35,:)=bin12_temp;
+% all(36,:)=bin12_temp;
+% all(37,:)=bin12_temp;
+% all(38,:)=bin12_temp;
+% all(39,:)=bin12_temp;
+% all(40,:)=bin12_temp;
 
 figure(); 
 temp=all_theta_noLED_Ntsr1.S(~isnan(all_theta_noLED_Ntsr1.t) & all_theta_noLED_Ntsr1.t<=cutToMaxTime & all_theta_noLED_Ntsr1.t>=cutToMinTime,all_theta_noLED_Ntsr1.f<=50);
@@ -595,7 +693,17 @@ spec=nanmean(specgram(specgram_t>=timeWindow(1) & specgram_t<=timeWindow(2),:),1
 
 end
 
-function plotWStderr(x,y1,y2,c1,c2,doFill)
+function [y1,y2]=plotWStderr(x,y1,y2,c1,c2,doFill)
+
+baseSub=false;
+baseWindow=[1.485 3.535];
+
+if baseSub==true
+    y1=y1-repmat(nanmean(y1(:,x>=baseWindow(1) & x<=baseWindow(2)),2),1,size(y1,2));
+    if ~isempty(y2)
+        y2=y2-repmat(nanmean(y2(:,x>=baseWindow(1) & x<=baseWindow(2)),2),1,size(y2,2));
+    end
+end
 
 figure();
 plot(x,nanmean(y1,1),'Color',c1);

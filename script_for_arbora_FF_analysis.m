@@ -105,12 +105,19 @@ plotWStderr_simple(F1_theta_noLED,F1_theta_LED,trialDuration,'k','c',times,1);
 %% Put together
 
 plotThisFreq=1;
-dd{1}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T1' '\Hz' num2str(plotThisFreq)];
-dd{2}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T2' '\Hz' num2str(plotThisFreq)];
-dd{3}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T3' '\Hz' num2str(plotThisFreq)];
-dd{4}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T4' '\Hz' num2str(plotThisFreq)];
-dd{5}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T5' '\Hz' num2str(plotThisFreq)];
-dd{6}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T6' '\Hz' num2str(plotThisFreq)];
+dd{1}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T1_noAv' '\Hz' num2str(plotThisFreq)];
+dd{2}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T2_noAv' '\Hz' num2str(plotThisFreq)];
+dd{3}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T3_noAv' '\Hz' num2str(plotThisFreq)];
+dd{4}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T4_noAv' '\Hz' num2str(plotThisFreq)];
+dd{5}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T5_noAv' '\Hz' num2str(plotThisFreq)];
+dd{6}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T6_noAv' '\Hz' num2str(plotThisFreq)];
+
+% dd{1}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T1' '\Hz' num2str(plotThisFreq)];
+% dd{2}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T2' '\Hz' num2str(plotThisFreq)];
+% dd{3}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T3' '\Hz' num2str(plotThisFreq)];
+% dd{4}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T4' '\Hz' num2str(plotThisFreq)];
+% dd{5}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T5' '\Hz' num2str(plotThisFreq)];
+% dd{6}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Ntsr1 opto tagging\AR2019-08-15 V1\FF\OneDrive-2019-11-04\T6' '\Hz' num2str(plotThisFreq)];
 
 % dd{1}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-07-05\FF\T1 different bin' '\Hz' num2str(plotThisFreq)];
 % dd{2}=['\\research.files.med.harvard.edu\neurobio\MICROSCOPE\Kim\FF_manuscript\Gtacr2 final figure\AR2019-07-05\FF\T4 different bin' '\Hz' num2str(plotThisFreq)];
