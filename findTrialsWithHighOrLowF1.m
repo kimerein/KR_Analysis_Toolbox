@@ -1,7 +1,8 @@
-function [lowF1Trials,highF1Trials]=findTrialsWithHighOrLowF1(noTheta_trialAv_noLED,psth,uses,uses_tri,noThetaTrials,isNoTheta)
+function [lowF1Trials,highF1Trials]=findTrialsWithHighOrLowF1(noTheta_trialAv_noLED,psth,uses,uses_tri,noThetaTrials,isNoTheta,stimWindow)
 
 useLED=0;
-stimWindow=[4 6.5];
+% stimWindow=[4 6.5];
+% stimWindow=[6 8.5];
 F1range=[2.5 3.5];
 
 isHigh=nan(size(psth.psths{1},1),1);
@@ -27,6 +28,7 @@ for j=1:length(noTheta_trialAv_noLED)
         allFs(k,:)=reshape(nanmean(nanmean(currs(currt>=stimWindow(1) & currt<=stimWindow(2),currf>=0 & currf<=50,:),2),1),1,size(currs,3));
     end
     F1s=nanmean(F1s,1)./nanmean(allFs,1);
+%     F1s=nanmean(F1s,1);
     medF1=median(F1s(~isnan(F1s)));
     
     isHigh(isInCurrTrialSet==1)=F1s>medF1;

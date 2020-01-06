@@ -86,6 +86,8 @@ if iscell(datadir)
     all_theta_noLED.psth=[];
     all_theta_LED.psth=[];
     psth_t=[];
+    all_p_noTheta_noLED_Ntsr1=[];
+    all_p_theta_noLED_Ntsr1=[];
     
     runningTallyNtsr1=0;
     runningTallyOther=0;
@@ -228,8 +230,11 @@ if iscell(datadir)
                     all_theta_LED_Ntsr1.spont_spec=grabSpecInTimeWindow(theta_LED.allS.S{j},theta_LED.allS.t,spontWindow);
                     all_theta_LED_Ntsr1.evoked_spec=grabSpecInTimeWindow(theta_LED.allS.S{j},theta_LED.allS.t,evokedWindow);
                     
-                    [all_noTheta_noLED_Ntsr1.psth,all_noTheta_LED_Ntsr1.psth,all_theta_noLED_Ntsr1.psth,all_theta_LED_Ntsr1.psth]=divideUpPSTH(psth,noThetaTrials,classifyAsNtsr1,true);
+                    [all_noTheta_noLED_Ntsr1.psth,all_noTheta_LED_Ntsr1.psth,all_theta_noLED_Ntsr1.psth,all_theta_LED_Ntsr1.psth,p_noTheta,p_theta]=divideUpPSTH(psth,noThetaTrials,j,spontWindow,evokedWindow);
                     psth_t=psth.t;
+                    
+                    all_p_noTheta_noLED_Ntsr1=[all_p_noTheta_noLED_Ntsr1 p_noTheta];
+                    all_p_theta_noLED_Ntsr1=[all_p_theta_noLED_Ntsr1 p_theta];
                 else
                     if isFs(j)==takeFSForNonNtsr1
                         all_noTheta_noLED.t=noTheta_noLED.allS.t;
@@ -268,7 +273,7 @@ if iscell(datadir)
                         all_theta_LED.spont_spec=grabSpecInTimeWindow(theta_LED.allS.S{j},theta_LED.allS.t,spontWindow);
                         all_theta_LED.evoked_spec=grabSpecInTimeWindow(theta_LED.allS.S{j},theta_LED.allS.t,evokedWindow);
                         
-                        [all_noTheta_noLED.psth,all_noTheta_LED.psth,all_theta_noLED.psth,all_theta_LED.psth]=divideUpPSTH(psth,noThetaTrials,classifyAsNtsr1,false);
+                        [all_noTheta_noLED.psth,all_noTheta_LED.psth,all_theta_noLED.psth,all_theta_LED.psth,p_noTheta,p_theta]=divideUpPSTH(psth,noThetaTrials,j,spontWindow,evokedWindow);
                         psth_t=psth.t;
                     end
                 end
@@ -299,11 +304,14 @@ if iscell(datadir)
                     all_theta_LED_Ntsr1.spont_spec=[all_theta_LED_Ntsr1.spont_spec; grabSpecInTimeWindow(theta_LED.allS.S{j},theta_LED.allS.t,spontWindow)];
                     all_theta_LED_Ntsr1.evoked_spec=[all_theta_LED_Ntsr1.evoked_spec; grabSpecInTimeWindow(theta_LED.allS.S{j},theta_LED.allS.t,evokedWindow)];
                     
-                    [all_noTheta_noLED_psth,all_noTheta_LED_psth,all_theta_noLED_psth,all_theta_LED_psth]=divideUpPSTH(psth,noThetaTrials,classifyAsNtsr1,true);
+                    [all_noTheta_noLED_psth,all_noTheta_LED_psth,all_theta_noLED_psth,all_theta_LED_psth,p_noTheta,p_theta]=divideUpPSTH(psth,noThetaTrials,j,spontWindow,evokedWindow);
                     all_noTheta_noLED_Ntsr1.psth=[all_noTheta_noLED_Ntsr1.psth; all_noTheta_noLED_psth];
                     all_noTheta_LED_Ntsr1.psth=[all_noTheta_LED_Ntsr1.psth; all_noTheta_LED_psth];
                     all_theta_noLED_Ntsr1.psth=[all_theta_noLED_Ntsr1.psth; all_theta_noLED_psth];
                     all_theta_LED_Ntsr1.psth=[all_theta_LED_Ntsr1.psth; all_theta_LED_psth];
+                    
+                    all_p_noTheta_noLED_Ntsr1=[all_p_noTheta_noLED_Ntsr1 p_noTheta];
+                    all_p_theta_noLED_Ntsr1=[all_p_theta_noLED_Ntsr1 p_theta];
                     
                     if size(noTheta_noLED.HFa,2)>size(all_noTheta_noLED_Ntsr1.HFa,2)
                         all_noTheta_noLED_Ntsr1.HFa=[all_noTheta_noLED_Ntsr1.HFa; noTheta_noLED.HFa(:,1:size(all_noTheta_noLED_Ntsr1.HFa,2))];
@@ -363,7 +371,7 @@ if iscell(datadir)
                         all_theta_LED.spont_spec=[all_theta_LED.spont_spec; grabSpecInTimeWindow(theta_LED.allS.S{j},theta_LED.allS.t,spontWindow)];
                         all_theta_LED.evoked_spec=[all_theta_LED.evoked_spec; grabSpecInTimeWindow(theta_LED.allS.S{j},theta_LED.allS.t,evokedWindow)];
                         
-                        [all_noTheta_noLED_psth,all_noTheta_LED_psth,all_theta_noLED_psth,all_theta_LED_psth]=divideUpPSTH(psth,noThetaTrials,classifyAsNtsr1,false);
+                        [all_noTheta_noLED_psth,all_noTheta_LED_psth,all_theta_noLED_psth,all_theta_LED_psth,p_noTheta,p_theta]=divideUpPSTH(psth,noThetaTrials,j,spontWindow,evokedWindow);
                         all_noTheta_noLED.psth=[all_noTheta_noLED.psth; all_noTheta_noLED_psth];
                         all_noTheta_LED.psth=[all_noTheta_LED.psth; all_noTheta_LED_psth];
                         all_theta_noLED.psth=[all_theta_noLED.psth; all_theta_noLED_psth];
@@ -432,6 +440,43 @@ title('No theta Ntsr1');
 
 plotWStderr(downSampAv(psth_t,ds),downSampMatrix(all_theta_noLED_Ntsr1.psth,ds),[],'k','c',1);
 title('Theta Ntsr1');
+
+ev_noTheta=nanmean(all_noTheta_noLED_Ntsr1.psth(:,psth_t>=evokedWindow(1) & psth_t<=evokedWindow(2)),2);
+spont_noTheta=nanmean(all_noTheta_noLED_Ntsr1.psth(:,psth_t>=spontWindow(1) & psth_t<=spontWindow(2)),2);
+figure();
+for i=1:length(spont_noTheta)
+    if all_p_noTheta_noLED_Ntsr1(i)<0.05
+        line([1 2],[spont_noTheta(i) ev_noTheta(i)],'Color','k','LineWidth',1.8);
+    else
+        line([1 2],[spont_noTheta(i) ev_noTheta(i)],'Color','k','LineWidth',0.5);
+    end
+    hold on;
+end
+set(gca,'Yscale','log');
+disp('p-value for raw firing rates spont vs evoked no theta');
+disp(signrank(ev_noTheta,spont_noTheta));
+
+ev_theta=nanmean(all_theta_noLED_Ntsr1.psth(:,psth_t>=evokedWindow(1) & psth_t<=evokedWindow(2)),2);
+spont_theta=nanmean(all_theta_noLED_Ntsr1.psth(:,psth_t>=spontWindow(1) & psth_t<=spontWindow(2)),2);
+figure();
+for i=1:length(spont_theta)
+    if all_p_theta_noLED_Ntsr1(i)<0.05
+        line([1 2],[spont_theta(i) ev_theta(i)],'Color','k','LineWidth',1.8);
+    else
+        line([1 2],[spont_theta(i) ev_theta(i)],'Color','k','LineWidth',0.5);
+    end
+    hold on;
+end
+set(gca,'Yscale','log');
+disp('p-value for raw firing rates spont vs evoked theta');
+disp(signrank(ev_theta,spont_theta));
+
+figure(); 
+scatter(ev_noTheta-spont_noTheta,ev_theta-spont_theta,[],'k');
+hold on;
+scatter(ev_noTheta(all_p_noTheta_noLED_Ntsr1<0.05 & all_p_theta_noLED_Ntsr1<0.05)-spont_noTheta(all_p_noTheta_noLED_Ntsr1<0.05 & all_p_theta_noLED_Ntsr1<0.05),ev_theta(all_p_noTheta_noLED_Ntsr1<0.05 & all_p_theta_noLED_Ntsr1<0.05)-spont_theta(all_p_noTheta_noLED_Ntsr1<0.05 & all_p_theta_noLED_Ntsr1<0.05),[],'k','filled');
+scatter(ev_noTheta(all_p_noTheta_noLED_Ntsr1<0.05 & all_p_theta_noLED_Ntsr1>=0.05)-spont_noTheta(all_p_noTheta_noLED_Ntsr1<0.05 & all_p_theta_noLED_Ntsr1>=0.05),ev_theta(all_p_noTheta_noLED_Ntsr1<0.05 & all_p_theta_noLED_Ntsr1>=0.05)-spont_theta(all_p_noTheta_noLED_Ntsr1<0.05 & all_p_theta_noLED_Ntsr1>=0.05),[],[0.7765 0.2275 0.8863],'filled');
+scatter(ev_noTheta(all_p_noTheta_noLED_Ntsr1>=0.05 & all_p_theta_noLED_Ntsr1<0.05)-spont_noTheta(all_p_noTheta_noLED_Ntsr1>=0.05 & all_p_theta_noLED_Ntsr1<0.05),ev_theta(all_p_noTheta_noLED_Ntsr1>=0.05 & all_p_theta_noLED_Ntsr1<0.05)-spont_theta(all_p_noTheta_noLED_Ntsr1>=0.05 & all_p_theta_noLED_Ntsr1<0.05),[],[0 0.7529 0.5529],'filled');
 
 temp1=nanmean(all_noTheta_noLED_Ntsr1.spont_spec(:,all_noTheta_noLED_Ntsr1.f>=9.5 & all_noTheta_noLED_Ntsr1.f<=16.5),2)./nanmean(all_noTheta_noLED_Ntsr1.spont_spec(:,all_noTheta_noLED_Ntsr1.f>=4 & all_noTheta_noLED_Ntsr1.f<=6.5),2);
 temp2=nanmean(all_noTheta_noLED_Ntsr1.evoked_spec(:,all_noTheta_noLED_Ntsr1.f>=9.5 & all_noTheta_noLED_Ntsr1.f<=16.5),2)./nanmean(all_noTheta_noLED_Ntsr1.evoked_spec(:,all_noTheta_noLED_Ntsr1.f>=4 & all_noTheta_noLED_Ntsr1.f<=6.5),2);
@@ -730,7 +775,7 @@ end
     
 end
 
-function [noTheta_noLED,noTheta_LED,theta_noLED,theta_LED]=divideUpPSTH(psth,noThetaTrials,classifyAsNtsr1,takeNtsr1)
+function [noTheta_noLED,noTheta_LED,theta_noLED,theta_LED,p_noTheta_noLED,p_theta_noLED]=divideUpPSTH(psth,noThetaTrials,takeUnitN,spontWindow,evokedWindow)
 
 l=psth.unitLED{1};
 ledOff=0;
@@ -744,15 +789,32 @@ theta_LED=nan(length(psth.psths),size(psth.psths{1},2));
 for i=1:length(psth.psths)
     temp=psth.psths{i};
     noTheta_noLED(i,:)=nanmean(temp(noThetaTrials'==1 & ismember(l,ledOff),:),1);
+    psth_t=linspace(nanmin(psth.t),nanmax(psth.t),size(psth.psths{1},2));
+    tempie1=nanmean(temp(noThetaTrials'==1 & ismember(l,ledOff),psth_t>=spontWindow(1) & psth_t<=spontWindow(2)),2);
+    tempie2=nanmean(temp(noThetaTrials'==1 & ismember(l,ledOff),psth_t>=evokedWindow(1) & psth_t<=evokedWindow(2)),2);
+    if all(isnan(tempie1) | isnan(tempie2))
+        p_noTheta_noLED(i)=nan;
+    else
+        p_noTheta_noLED(i)=signrank(tempie1,tempie2);
+    end
     noTheta_LED(i,:)=nanmean(temp(noThetaTrials'==1 & ismember(l,ledOn),:),1);
     theta_noLED(i,:)=nanmean(temp(noThetaTrials'==0 & ismember(l,ledOff),:),1);
+    tempie1=nanmean(temp(noThetaTrials'==0 & ismember(l,ledOff),psth_t>=spontWindow(1) & psth_t<=spontWindow(2)),2);
+    tempie2=nanmean(temp(noThetaTrials'==0 & ismember(l,ledOff),psth_t>=evokedWindow(1) & psth_t<=evokedWindow(2)),2);
+    if all(isnan(tempie1) | isnan(tempie2))
+        p_theta_noLED(i)=nan;
+    else
+        p_theta_noLED(i)=signrank(tempie1,tempie2);
+    end
     theta_LED(i,:)=nanmean(temp(noThetaTrials'==0 & ismember(l,ledOn),:),1);
 end
 
-noTheta_noLED=noTheta_noLED(classifyAsNtsr1==takeNtsr1,:);
-noTheta_LED=noTheta_LED(classifyAsNtsr1==takeNtsr1,:);
-theta_noLED=theta_noLED(classifyAsNtsr1==takeNtsr1,:);
-theta_LED=theta_LED(classifyAsNtsr1==takeNtsr1,:);
+noTheta_noLED=noTheta_noLED(takeUnitN,:);
+noTheta_LED=noTheta_LED(takeUnitN,:);
+theta_noLED=theta_noLED(takeUnitN,:);
+theta_LED=theta_LED(takeUnitN,:);
+p_noTheta_noLED=p_noTheta_noLED(takeUnitN);
+p_theta_noLED=p_theta_noLED(takeUnitN);
 
 end
 

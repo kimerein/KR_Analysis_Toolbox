@@ -8,20 +8,28 @@ if iscell(datadir)
     
     for i=1:length(datadir)
         d=datadir{i};
-        a=load([d '\' 'noTheta_trialAv_noLED']);
-        noTheta_trialAv_noLED=a.noTheta_trialAv;
+%         a=load([d '\' 'noTheta_trialAv_noLED']);
+%         noTheta_trialAv_noLED=a.noTheta_trialAv;
+        a=load([d '\' 'noTheta_noLED']);
+        noTheta_trialAv_noLED=a.noTheta;
         all_noTheta_trialAv_noLED=concatStructs(all_noTheta_trialAv_noLED,noTheta_trialAv_noLED);
         
-        a=load([d '\' 'noTheta_trialAv_LED']);
-        noTheta_trialAv_LED=a.noTheta_trialAv;
+%         a=load([d '\' 'noTheta_trialAv_LED']);
+%         noTheta_trialAv_LED=a.noTheta_trialAv;
+        a=load([d '\' 'noTheta_LED']);
+        noTheta_trialAv_LED=a.noTheta;
         all_noTheta_trialAv_LED=concatStructs(all_noTheta_trialAv_LED,noTheta_trialAv_LED);
         
-        a=load([d '\' 'theta_trialAv_noLED']);
-        theta_trialAv_noLED=a.theta_trialAv;
+%         a=load([d '\' 'theta_trialAv_noLED']);
+%         theta_trialAv_noLED=a.theta_trialAv;
+        a=load([d '\' 'theta_noLED']);
+        theta_trialAv_noLED=a.theta;
         all_theta_trialAv_noLED=concatStructs(all_theta_trialAv_noLED,theta_trialAv_noLED);
 
-        a=load([d '\' 'theta_trialAv_LED']);
-        theta_trialAv_LED=a.theta_trialAv;
+%         a=load([d '\' 'theta_trialAv_LED']);
+%         theta_trialAv_LED=a.theta_trialAv;
+        a=load([d '\' 'theta_LED']);
+        theta_trialAv_LED=a.theta;
         all_theta_trialAv_LED=concatStructs(all_theta_trialAv_LED,theta_trialAv_LED);
     end
     noTheta_trialAv_noLED=all_noTheta_trialAv_noLED;

@@ -11,6 +11,16 @@ for i=1:length(dd)
     end
     a=load([d '\' psthName]);
     currpsth=a.(infileName);
+    if exist([d '\' take '.mat'],'file')
+        a=load([d '\' take '.mat']);
+        if ~isfield(a,'take')
+            error('variable must be called "take" in file');
+        else
+            takeTri=a.take;
+        end
+    else
+        takeTri=[];
+    end
     if strcmp(infileName,'fractionpsth')
         currpsth.psths=currpsth.psths';
     end
@@ -24,6 +34,32 @@ for i=1:length(dd)
             currpsth.noThetaTrials{j}=currtheta;
         end
     end
+    
+    % take only certain trials?
+    if ~isempty(takeTri)
+        for j=1:length(currpsth.psths)
+            temp=currpsth.psths{j};
+            temp=temp(takeTri,:);
+            currpsth.psths{j}=temp;
+            
+            temp=currpsth.unitTrials{j};
+            temp=temp(takeTri);
+            currpsth.unitTrials{j}=temp;
+            
+            temp=currpsth.unitStimcond{j};
+            temp=temp(takeTri);
+            currpsth.unitStimcond{j}=temp;
+            
+            temp=currpsth.unitLED{j};
+            temp=temp(takeTri);
+            currpsth.unitLED{j}=temp;
+            
+            temp=currpsth.noThetaTrials{j};
+            temp=temp(takeTri);
+            currpsth.noThetaTrials{j}=temp;
+        end
+    end
+    
     psth=concatPSTHs_acrossExpts(psth,currpsth);
 end
 
