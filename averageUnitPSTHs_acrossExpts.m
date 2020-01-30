@@ -1,6 +1,6 @@
 function [psth,blackPSTH,redPSTH]=averageUnitPSTHs_acrossExpts(dd,psthName,infileName,tt,thetaStateName,infile_thetaStateName,take)
 
-useThetaState=1;
+useThetaState=0;
 
 psth=[];
 for i=1:length(dd)
@@ -97,8 +97,8 @@ if useThetaState==1
         p=psth.unitLED{i};
         theta_psth.unitLED{i}=p(thetaState==0);
     end
-%     [blackPSTH,redPSTH]=averageUnitPSTHs(noTheta_psth);
-    [blackPSTH,redPSTH]=averageUnitPSTHs(theta_psth);
+    [blackPSTH,redPSTH]=averageUnitPSTHs(noTheta_psth);
+%     [blackPSTH,redPSTH]=averageUnitPSTHs(theta_psth);
 else
     [blackPSTH,redPSTH]=averageUnitPSTHs(psth);
 end
@@ -120,6 +120,11 @@ else
     end
     newPSTH.t=struct1.t;
     newPSTH.psths=[struct1.psths; struct2.psths];
+    if size(struct2.unitTrials,1)>1
+        struct2.unitTrials=struct2.unitTrials';
+        struct2.unitStimcond=struct2.unitStimcond';
+        struct2.unitLED=struct2.unitLED';
+    end
     newPSTH.unitTrials=[struct1.unitTrials struct2.unitTrials];
     newPSTH.unitStimcond=[struct1.unitStimcond struct2.unitStimcond];
     newPSTH.unitLED=[struct1.unitLED struct2.unitLED];

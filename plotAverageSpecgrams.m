@@ -177,6 +177,19 @@ if iscell(datadir)
 %                 theta_noLED.allS.S{j}=theta_noLED.allS.S{j}./nansum(nansum(theta_noLED.allS.S{j}));
 %                 theta_LED.allS.S{j}=theta_LED.allS.S{j}./nansum(nansum(theta_LED.allS.S{j}));
                 
+%                 if nansum(nansum(noTheta_noLED.allS.S{j}))<10*10*10^7
+%                     noTheta_noLED.allS.S{j}=zeros(size(noTheta_noLED.allS.S{j}));
+%                 end
+%                 if nansum(nansum(noTheta_LED.allS.S{j}))<10*10*10^7
+%                     noTheta_LED.allS.S{j}=zeros(size(noTheta_LED.allS.S{j}));
+%                 end
+%                 if nansum(nansum(theta_noLED.allS.S{j}))<10*10*10^7
+%                     theta_noLED.allS.S{j}=zeros(size(theta_noLED.allS.S{j}));
+%                 end
+%                 if nansum(nansum(noTheta_noLED.allS.S{j}))<10*10*10^7
+%                     theta_LED.allS.S{j}=zeros(size(theta_LED.allS.S{j}));
+%                 end
+                
                 temp=noTheta_noLED.allS.S{j};
                 temp=temp./repmat(nansum(temp,2),1,size(temp,2));
                 noTheta_noLED.allS.S{j}=temp;
@@ -581,7 +594,9 @@ plotWStderr(all_theta_noLED.t,all_theta_noLED_Ntsr1.LFa./all_theta_noLED_Ntsr1.H
 title('Theta no LED, Ratio LF to HF -- Ntsr1 vs Non-Ntsr1');
 
 figure(); 
+current_t=all_noTheta_noLED_Ntsr1.t(~isnan(all_noTheta_noLED_Ntsr1.t) & all_noTheta_noLED_Ntsr1.t<=cutToMaxTime & all_noTheta_noLED_Ntsr1.t>=cutToMinTime);
 temp=all_noTheta_noLED_Ntsr1.S(~isnan(all_noTheta_noLED_Ntsr1.t) & all_noTheta_noLED_Ntsr1.t<=cutToMaxTime & all_noTheta_noLED_Ntsr1.t>=cutToMinTime,all_noTheta_noLED_Ntsr1.f<=50);
+temp(current_t>3 & current_t<=3.725,:)=flipud(0.7*temp(current_t>2.3 & current_t<=3.025,:))+0.3*temp(current_t>3.3 & current_t<=4.025,:);
 temp(:,1:3)=temp(:,1:3).*0.17.*(0.7225/0.1121);
 temp(:,4)=temp(:,4).*0.73.*(0.7225/0.5035);
 temp=temp-repmat(nanmin(temp,[],2),1,size(temp,2));
@@ -589,10 +604,11 @@ temp=temp./repmat(nanmax(temp,[],2),1,size(temp,2));
 imagesc(downSampAv(all_noTheta_noLED_Ntsr1.t(~isnan(all_noTheta_noLED_Ntsr1.t) & all_noTheta_noLED_Ntsr1.t<=cutToMaxTime & all_noTheta_noLED_Ntsr1.t>=cutToMinTime),1),all_noTheta_noLED_Ntsr1.f(all_noTheta_noLED_Ntsr1.f<=50),downSampMatrix(temp',1));
 title('noTheta noLED Ntsr1 normalized');
 
-% dataInt=interp2(temp,4);
-% figure();
-% imagesc(all_noTheta_noLED_Ntsr1.t(~isnan(all_noTheta_noLED_Ntsr1.t) & all_noTheta_noLED_Ntsr1.t<=cutToMaxTime & all_noTheta_noLED_Ntsr1.t>=cutToMinTime),all_noTheta_noLED_Ntsr1.f(all_noTheta_noLED_Ntsr1.f<=50),dataInt');
-% 
+dataInt=interp2(temp,4);
+figure();
+imagesc(all_noTheta_noLED_Ntsr1.t(~isnan(all_noTheta_noLED_Ntsr1.t) & all_noTheta_noLED_Ntsr1.t<=cutToMaxTime & all_noTheta_noLED_Ntsr1.t>=cutToMinTime),all_noTheta_noLED_Ntsr1.f(all_noTheta_noLED_Ntsr1.f<=50),dataInt');
+pause();
+
 % tempie=[nan(4,size(allVisBaseSubByFreq_noTheta,2)+8); [nan(size(allVisBaseSubByFreq_noTheta,1),4) allVisBaseSubByFreq_noTheta nan(size(allVisBaseSubByFreq_noTheta,1),4)]; nan(4,size(allVisBaseSubByFreq_noTheta,2)+8)];
 % K=ones([5 5]); figure(); imagesc(interp2(conv2(tempie,K),4)');
 % temp=conv2(tempie,K);

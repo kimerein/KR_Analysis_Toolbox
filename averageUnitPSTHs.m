@@ -10,12 +10,13 @@ end
 
 downSamp=1; % down sample factor
 % downSamp=10; % down sample factor
-% blackLED=[0];
-blackLED=[0 0.05];
+blackLED=[0];
+% blackLED=[0 0.05];
 % freqs=[1 2 4 6 8 10 12 14 16 18 20 30 40 50 60];
 % blackLED=freqs;
 % redLED=[0.05 0.7575 0.2525 0.25 2.5 5.00 5.05 6.06 12.12 50.5];
-redLED=[single(50.5) double(50.5)];
+% redLED=[single(50.5) double(50.5)];
+redLED=[0];
 % redLED=[double(6.06)];
 suppressFigures=0;
 % redLED=[0];
