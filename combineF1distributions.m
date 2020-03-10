@@ -1,8 +1,12 @@
-function combineF1distributions(datadir,addName,suppressOutput)
+function [F1sortedbyalpha]=combineF1distributions(datadir,addName,suppressOutput)
 
-responsiveOnly=true;
+% responsiveOnly=true;
+% visResponseThresh_backup='50';
+% onlyTakeAboveZero=true;
+
+responsiveOnly=false;
 visResponseThresh_backup='50';
-onlyTakeAboveZero=true;
+onlyTakeAboveZero=false;
 
 % bincenters=[-10:0.01:10];
 bincenters=[-100:0.1:100];
@@ -37,6 +41,16 @@ if iscell(datadir)
     all_noTheta_LED_F1=[];
     all_theta_noLED_F1=[];
     all_theta_LED_F1=[];
+    
+    all_noTheta_noLED_F1_sortedByAlpha_low=[];
+    all_noTheta_LED_F1_sortedByAlpha_low=[];
+    all_theta_noLED_F1_sortedByAlpha_low=[];
+    all_theta_LED_F1_sortedByAlpha_low=[];
+    
+    all_noTheta_noLED_F1_sortedByAlpha_high=[];
+    all_noTheta_LED_F1_sortedByAlpha_high=[];
+    all_theta_noLED_F1_sortedByAlpha_high=[];
+    all_theta_LED_F1_sortedByAlpha_high=[];
     
     all_noTheta_noLED_F1_zscoreNow=[];
     all_noTheta_LED_F1_zscoreNow=[];
@@ -132,6 +146,22 @@ if iscell(datadir)
         all_theta_noLED_F1=[all_theta_noLED_F1 reshape(theta_noLED_out.F1s(1:end),1,length(theta_noLED_out.F1s(1:end)))];
         all_theta_LED_F1=[all_theta_LED_F1 reshape(theta_LED_out.F1s(1:end),1,length(theta_LED_out.F1s(1:end)))];
         
+        [low_alpha,high_alpha]=sortByAlpha(noTheta_noLED_out.F1s,noTheta_noLED_out.alphas);
+        all_noTheta_noLED_F1_sortedByAlpha_low=[all_noTheta_noLED_F1_sortedByAlpha_low low_alpha];
+        all_noTheta_noLED_F1_sortedByAlpha_high=[all_noTheta_noLED_F1_sortedByAlpha_high high_alpha];
+        
+        [low_alpha,high_alpha]=sortByAlpha(noTheta_LED_out.F1s,noTheta_LED_out.alphas);
+        all_noTheta_LED_F1_sortedByAlpha_low=[all_noTheta_LED_F1_sortedByAlpha_low low_alpha];
+        all_noTheta_LED_F1_sortedByAlpha_high=[all_noTheta_LED_F1_sortedByAlpha_high high_alpha];
+        
+        [low_alpha,high_alpha]=sortByAlpha(theta_noLED_out.F1s,theta_noLED_out.alphas);
+        all_theta_noLED_F1_sortedByAlpha_low=[all_theta_noLED_F1_sortedByAlpha_low low_alpha];
+        all_theta_noLED_F1_sortedByAlpha_high=[all_theta_noLED_F1_sortedByAlpha_high high_alpha];
+        
+        [low_alpha,high_alpha]=sortByAlpha(theta_LED_out.F1s,theta_LED_out.alphas);
+        all_theta_LED_F1_sortedByAlpha_low=[all_theta_LED_F1_sortedByAlpha_low low_alpha];
+        all_theta_LED_F1_sortedByAlpha_high=[all_theta_LED_F1_sortedByAlpha_high high_alpha];
+        
         all_noTheta_noLED_alphas=[all_noTheta_noLED_alphas reshape(noTheta_noLED_out.alphas(1:end),1,length(noTheta_noLED_out.alphas(1:end)))];
         all_noTheta_LED_alphas=[all_noTheta_LED_alphas reshape(noTheta_LED_out.alphas(1:end),1,length(noTheta_LED_out.alphas(1:end)))];
         all_theta_noLED_alphas=[all_theta_noLED_alphas reshape(theta_noLED_out.alphas(1:end),1,length(theta_noLED_out.alphas(1:end)))];
@@ -163,6 +193,18 @@ if iscell(datadir)
 else
     error('expected datadir to be cell array');
 end
+
+F1sortedbyalpha.all_noTheta_noLED_F1_sortedByAlpha_low=all_noTheta_noLED_F1_sortedByAlpha_low;
+F1sortedbyalpha.all_noTheta_noLED_F1_sortedByAlpha_high=all_noTheta_noLED_F1_sortedByAlpha_high;
+
+F1sortedbyalpha.all_noTheta_LED_F1_sortedByAlpha_low=all_noTheta_LED_F1_sortedByAlpha_low;
+F1sortedbyalpha.all_noTheta_LED_F1_sortedByAlpha_high=all_noTheta_LED_F1_sortedByAlpha_high;
+
+F1sortedbyalpha.all_theta_noLED_F1_sortedByAlpha_low=all_theta_noLED_F1_sortedByAlpha_low;
+F1sortedbyalpha.all_theta_noLED_F1_sortedByAlpha_high=all_theta_noLED_F1_sortedByAlpha_high;
+
+F1sortedbyalpha.all_theta_LED_F1_sortedByAlpha_low=all_theta_LED_F1_sortedByAlpha_low;
+F1sortedbyalpha.all_theta_LED_F1_sortedByAlpha_high=all_theta_LED_F1_sortedByAlpha_high;
 
 if suppressOutput==false
     disp('n');
@@ -250,5 +292,19 @@ plot(x,(n./nanmax(n))*maxn,'Color','g');
 [n,x]=hist(temp(temp_alpha>1),smallerbins);
 plot(x,(n./nanmax(n))*maxn,'Color','r');
 title(tit);
+
+end
+
+function [low_alpha,high_alpha]=sortByAlpha(temp,temp_alpha)
+
+low_alpha=[];
+high_alpha=[];
+
+% units are rows, columns are trials
+for i=1:size(temp,1)
+    med_alpha=nanmedian(temp_alpha(i,:));
+    low_alpha(i)=nanmean(temp(i,temp_alpha(i,:)<med_alpha));
+    high_alpha(i)=nanmean(temp(i,temp_alpha(i,:)>=med_alpha));
+end
 
 end
