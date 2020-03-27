@@ -52,6 +52,7 @@ for i=1:15
     line([freqs(i) freqs(i)],[nanmean(noTheta_LED(takeTheseUnits,i)./repmat(normVals_LED(takeTheseUnits)',1,1),1)-nanstd(noTheta_LED(takeTheseUnits,i)./repmat(normVals_LED(takeTheseUnits)',1,1),[],1)./sqrt(85) nanmean(noTheta_LED(takeTheseUnits,i)./repmat(normVals_LED(takeTheseUnits)',1,1),1)+nanstd(noTheta_LED(takeTheseUnits,i)./repmat(normVals_LED(takeTheseUnits)',1,1),[],1)./sqrt(85)],'Color','b');
 end
 
+return
 
 mult_noTheta=visResponses_ntsr1_noTheta_noLED'.*test_noTheta_alphaResponse;
 guess_noTheta_LED_fund=noTheta_noLED_fund-repmat(nanmean(mult_noTheta,2)',size(noTheta_noLED_fund,1),1)./(1.4924e+06);

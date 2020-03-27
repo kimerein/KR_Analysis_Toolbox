@@ -1,6 +1,7 @@
-function [noTheta_noLED_out,noTheta_LED_out,theta_noLED_out,theta_LED_out]=getF1distributions(dd,takeTrials_noTheta,takeTrials_noTheta_LED,takeTrials_theta,takeTrials_theta_LED,F1range,alphaRange,timeWindow,baseWindow,suppressOutput,baseTrials1,baseTrials2,baseTrials3,baseTrials4)
+function [noTheta_noLED_out,noTheta_LED_out,theta_noLED_out,theta_LED_out]=getF1distributions(dd,takeTrials_noTheta,takeTrials_noTheta_LED,takeTrials_theta,takeTrials_theta_LED,F1range,alphaRange,timeWindow,baseWindow,suppressOutput,baseTrials1,baseTrials2,baseTrials3,baseTrials4,otherWindow)
 
-baseIsSameTimeWindow=false;
+baseIsSameTimeWindow=true;
+getAlphaFromOther=true;
 
 % no-theta
 
@@ -8,7 +9,11 @@ a=load([dd '\noTheta_noLED.mat']);
 noTheta=a.noTheta;
 
 [~,F1s]=plotF1distributionsZscored(noTheta,takeTrials_noTheta,F1range,timeWindow,true);
-[~,alphas]=plotF1distributionsZscored(noTheta,takeTrials_noTheta,alphaRange,timeWindow,true);
+if getAlphaFromOther==false
+    [~,alphas]=plotF1distributionsZscored(noTheta,takeTrials_noTheta,alphaRange,timeWindow,true);
+else
+    [~,alphas]=plotF1distributionsZscored(noTheta,takeTrials_noTheta,alphaRange,otherWindow,true);
+end
 if baseIsSameTimeWindow==false
     [~,F1s_base]=plotF1distributionsZscored(noTheta,takeTrials_noTheta,F1range,baseWindow,true);
 else
@@ -55,7 +60,11 @@ a=load([dd '\noTheta_LED.mat']);
 noTheta=a.noTheta;
 
 [~,F1s]=plotF1distributionsZscored(noTheta,takeTrials_noTheta_LED,F1range,timeWindow,true);
-[~,alphas]=plotF1distributionsZscored(noTheta,takeTrials_noTheta_LED,alphaRange,timeWindow,true);
+if getAlphaFromOther==false    
+    [~,alphas]=plotF1distributionsZscored(noTheta,takeTrials_noTheta_LED,alphaRange,timeWindow,true);
+else
+    [~,alphas]=plotF1distributionsZscored(noTheta,takeTrials_noTheta_LED,alphaRange,otherWindow,true);
+end
 if baseIsSameTimeWindow==false
     [~,F1s_base]=plotF1distributionsZscored(noTheta,takeTrials_noTheta_LED,F1range,baseWindow,true);
 else
@@ -104,7 +113,11 @@ a=load([dd '\theta_noLED.mat']);
 theta=a.theta;
 
 [~,F1s]=plotF1distributionsZscored(theta,takeTrials_theta,F1range,timeWindow,true);
-[~,alphas]=plotF1distributionsZscored(theta,takeTrials_theta,alphaRange,timeWindow,true);
+if getAlphaFromOther==false    
+    [~,alphas]=plotF1distributionsZscored(theta,takeTrials_theta,alphaRange,timeWindow,true);
+else
+    [~,alphas]=plotF1distributionsZscored(noTheta,takeTrials_theta,alphaRange,otherWindow,true);
+end
 if baseIsSameTimeWindow==false
     [~,F1s_base]=plotF1distributionsZscored(theta,takeTrials_theta,F1range,baseWindow,true);
 else
@@ -151,7 +164,11 @@ a=load([dd '\theta_LED.mat']);
 theta=a.theta;
 
 [~,F1s]=plotF1distributionsZscored(theta,takeTrials_theta_LED,F1range,timeWindow,true);
-[~,alphas]=plotF1distributionsZscored(theta,takeTrials_theta_LED,alphaRange,timeWindow,true);
+if getAlphaFromOther==false    
+    [~,alphas]=plotF1distributionsZscored(theta,takeTrials_theta_LED,alphaRange,timeWindow,true);
+else
+    [~,alphas]=plotF1distributionsZscored(noTheta,takeTrials_theta_LED,alphaRange,otherWindow,true);
+end
 if baseIsSameTimeWindow==false
     [~,F1s_base]=plotF1distributionsZscored(theta,takeTrials_theta_LED,F1range,baseWindow,true);
 else
