@@ -5,7 +5,7 @@ if length(usel_noLED)==15
 else
     freqs=ones(1,length(uses)).*3;
 end
-freqs=[6 12];
+% freqs=[6 12];
 
 %uses=unique(dLGNpsth.unitStimcond{1});
 % usealls=0:10000;

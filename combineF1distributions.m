@@ -99,8 +99,6 @@ if iscell(datadir)
         else
             a=load([d '\' 'noTheta_noLED_out.mat']);
             noTheta_noLED_out=a.noTheta_noLED_out;
-            disp('input size 0');
-            disp(size(noTheta_noLED_out.F1s,1));
             a=load([d '\' 'noTheta_LED_out.mat']);
             noTheta_LED_out=a.noTheta_LED_out;
             a=load([d '\' 'theta_noLED_out.mat']);
@@ -148,16 +146,10 @@ if iscell(datadir)
         all_theta_noLED_F1=[all_theta_noLED_F1 reshape(theta_noLED_out.F1s(1:end),1,length(theta_noLED_out.F1s(1:end)))];
         all_theta_LED_F1=[all_theta_LED_F1 reshape(theta_LED_out.F1s(1:end),1,length(theta_LED_out.F1s(1:end)))];
         
-        disp('input size');
-        disp(size(noTheta_noLED_out.F1s,1));
-        
         [low_alpha,high_alpha]=sortByAlpha(noTheta_noLED_out.F1s,noTheta_noLED_out.alphas);
         all_noTheta_noLED_F1_sortedByAlpha_low=[all_noTheta_noLED_F1_sortedByAlpha_low low_alpha];
         all_noTheta_noLED_F1_sortedByAlpha_high=[all_noTheta_noLED_F1_sortedByAlpha_high high_alpha];
-        
-        disp('output size');
-        disp(length(low_alpha));
-        
+
         [low_alpha,high_alpha]=sortByAlpha(noTheta_LED_out.F1s,noTheta_LED_out.alphas);
         all_noTheta_LED_F1_sortedByAlpha_low=[all_noTheta_LED_F1_sortedByAlpha_low low_alpha];
         all_noTheta_LED_F1_sortedByAlpha_high=[all_noTheta_LED_F1_sortedByAlpha_high high_alpha];        

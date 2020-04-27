@@ -56,9 +56,14 @@ function expressionCoverageGUI_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 
 slice=varargin{1};
+fluorColor=varargin{2};
+if size(slice,3)>3
+    slice=slice(:,:,1:3);
+end
 h=imagesc(slice);
 handles.h=h;
 handles.slice=slice;
+handles.fluorColor=fluorColor;
 
 % Update handles structure
 guidata(hObject, handles);
@@ -92,11 +97,23 @@ currThresh=get(hObject,'Value');
 colorThresh=255*(1-currThresh);
 slice=handles.slice;
 h=handles.h;
-greenPix=slice(:,:,2);
-redPix=slice(:,:,1);
+fluorColor=handles.fluorColor;
+if strcmp(fluorColor,'green')
+    greenPix=slice(:,:,2);
+    redPix=slice(:,:,1);
+elseif strcmp(fluorColor,'red')
+    greenPix=slice(:,:,1);
+    redPix=slice(:,:,2);
+else
+    error('Do not recognize color name in second parameter');
+end
 updateSlice=slice;
 redPix(greenPix(1:end)>colorThresh)=255;
-updateSlice(:,:,1)=redPix;
+if strcmp(fluorColor,'green')
+    updateSlice(:,:,1)=redPix;
+elseif strcmp(fluorColor,'red')
+    updateSlice(:,:,2)=redPix;
+end
 handles.updateSlice=updateSlice;
 imagesc(updateSlice);
 

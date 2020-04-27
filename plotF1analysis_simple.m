@@ -55,9 +55,9 @@ end
 % [theta_noLED,theta_LED,isBigEnough]=plotWStderr_simple(theta_trialAv_noLED.F1amp,theta_trialAv_LED.F1amp,trialDuration,'r','c',times,allLines);
 % plotWStderr_simple(noTheta_trialAv_noLED.F1amp,theta_trialAv_LED.F1amp,trialDuration,'k','c',times,allLines);
 
-plotWStderr_simple(noTheta_trialAv_noLED.HFa,theta_trialAv_noLED.HFa,trialDuration,'k','r',times,allLines);
-[noTheta_noLED,noTheta_LED,isBigEnough]=plotWStderr_simple(noTheta_trialAv_noLED.HFa,noTheta_trialAv_LED.HFa,trialDuration,'k','b',times,allLines);
-[theta_noLED,theta_LED,isBigEnough]=plotWStderr_simple(theta_trialAv_noLED.HFa,theta_trialAv_LED.HFa,trialDuration,'r','c',times,allLines);
+[noTheta_noLED,theta_noLED,isBigEnough]=plotWStderr_simple(noTheta_trialAv_noLED.HFa,theta_trialAv_noLED.HFa,trialDuration,'k','r',times,allLines);
+[~,noTheta_LED,isBigEnough]=plotWStderr_simple(noTheta_trialAv_noLED.HFa,noTheta_trialAv_LED.HFa,trialDuration,'k','b',times,allLines);
+[~,theta_LED,isBigEnough]=plotWStderr_simple(theta_trialAv_noLED.HFa,theta_trialAv_LED.HFa,trialDuration,'r','c',times,allLines);
 plotWStderr_simple(noTheta_trialAv_noLED.HFa,theta_trialAv_LED.HFa,trialDuration,'k','c',times,allLines);
 
 % plotWStderr_simple(noTheta_trialAv_noLED.LFa,theta_trialAv_noLED.LFa,trialDuration,'k','r',times,allLines);

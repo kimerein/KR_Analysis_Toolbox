@@ -1,4 +1,4 @@
-function cov=expressionCoverage(im)
+function cov=expressionCoverage(im,col)
 cov=[];
 slice=imread(im);
-expressionCoverageGUI(slice);
+expressionCoverageGUI(slice,col);
