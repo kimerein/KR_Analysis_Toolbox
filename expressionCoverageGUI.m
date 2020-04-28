@@ -203,7 +203,12 @@ if isfield(handles,'updateSlice')
     patchHand=patch(vertices(:,1),vertices(:,2),'c');
     set(patchHand,'FaceAlpha',0.2);
     updateSlice=handles.updateSlice;
-    [cols,rows]=find(updateSlice(:,:,1)>254);
+    fluorColor=handles.fluorColor;
+    if strcmp(fluorColor,'green')
+        [cols,rows]=find(updateSlice(:,:,1)>254);
+    elseif strcmp(fluorColor,'red')
+        [cols,rows]=find(updateSlice(:,:,2)>254);
+    end
     isin=inpolygon(rows,cols,vertices(:,1),vertices(:,2));
     [k,v]=convhull(vertices(:,1),vertices(:,2));
     disp(sum(isin));
