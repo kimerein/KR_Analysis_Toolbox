@@ -29,8 +29,16 @@ end
 % end
 
 if showFigs==1
+    if length(pres)>5000
+        r=randsample(length(pres),5000);
+        plotpres=pres(r);
+        plotposts=posts(r);
+    else
+        plotpres=pres;
+        plotposts=posts;
+    end
     figure(); 
-    maloglog(pres*1000,posts*1000);
+    maloglog(plotpres*1000,plotposts*1000);
 end
 
 total=length(pres);

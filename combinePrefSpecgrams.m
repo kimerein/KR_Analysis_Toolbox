@@ -1,8 +1,8 @@
 function currForStats=combinePrefSpecgrams(datadir,trialDuration)
 
 F1range=[2.5 3.5];
-% stimWindow=[4 6.5];
-stimWindow=[1 3];
+stimWindow=[4 6.5];
+% stimWindow=[1 3];
 
 if iscell(datadir)
     all_nonprefSpecgrams_noTheta_LED={};
@@ -172,14 +172,14 @@ for i=1:length(nonprefSpecgrams_noTheta_LED)
 end
 
 % Plot F1
-[nonprefSpecgrams_noTheta_noLED_F1,nonprefSpecgrams_noTheta_LED_F1]=plotWStderr(nonprefSpecgrams_noTheta_noLED_F1,nonprefSpecgrams_noTheta_LED_F1,trialDuration,'b','r');
-thresh=0;
-isBigEnough=nanmean(nonprefSpecgrams_noTheta_noLED_F1(:,t>stimWindow(1) & t<=stimWindow(2)),2)>thresh;
-[nonprefSpecgrams_theta_noLED_F1,nonprefSpecgrams_theta_LED_F1]=plotWStderr(nonprefSpecgrams_theta_noLED_F1(isBigEnough==1),nonprefSpecgrams_theta_LED_F1(isBigEnough==1),trialDuration,'b','c');
-[prefSpecgrams_noTheta_noLED_F1,prefSpecgrams_noTheta_LED_F1]=plotWStderr(prefSpecgrams_noTheta_noLED_F1(isBigEnough==1),prefSpecgrams_noTheta_LED_F1(isBigEnough==1),trialDuration,'b','r');
-[prefSpecgrams_theta_noLED_F1,prefSpecgrams_theta_LED_F1]=plotWStderr(prefSpecgrams_theta_noLED_F1(isBigEnough==1),prefSpecgrams_theta_LED_F1(isBigEnough==1),trialDuration,'b','c');
+% [nonprefSpecgrams_noTheta_noLED_F1,nonprefSpecgrams_noTheta_LED_F1]=plotWStderr(nonprefSpecgrams_noTheta_noLED_F1,nonprefSpecgrams_noTheta_LED_F1,trialDuration,'b','r');
+% thresh=0;
+% isBigEnough=nanmean(nonprefSpecgrams_noTheta_noLED_F1(:,t>stimWindow(1) & t<=stimWindow(2)),2)>thresh;
+% [nonprefSpecgrams_theta_noLED_F1,nonprefSpecgrams_theta_LED_F1]=plotWStderr(nonprefSpecgrams_theta_noLED_F1(isBigEnough==1),nonprefSpecgrams_theta_LED_F1(isBigEnough==1),trialDuration,'b','c');
+% [prefSpecgrams_noTheta_noLED_F1,prefSpecgrams_noTheta_LED_F1]=plotWStderr(prefSpecgrams_noTheta_noLED_F1(isBigEnough==1),prefSpecgrams_noTheta_LED_F1(isBigEnough==1),trialDuration,'b','r');
+% [prefSpecgrams_theta_noLED_F1,prefSpecgrams_theta_LED_F1]=plotWStderr(prefSpecgrams_theta_noLED_F1(isBigEnough==1),prefSpecgrams_theta_LED_F1(isBigEnough==1),trialDuration,'b','c');
 
-return
+% return
 
 % Get statistics on ratio of pref to nonpref
 perc1=25;

@@ -1,11 +1,11 @@
 function [data1,data2,isBigEnough]=plotWStderr(data1,data2,trialDuration,c1,c2)
 
 
-norm=1;
+norm=0;
 normWindow=[1 3];
 % normWindow=[3.5 4];
 % normWindow=[4 6.5];
-baseSubtract=1;
+baseSubtract=0;
 % baseWindow=[0 2.5];
 % baseWindow=[0 3];
 % baseWindow=[3.9 4];

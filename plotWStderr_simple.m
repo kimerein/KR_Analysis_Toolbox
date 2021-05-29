@@ -1,10 +1,10 @@
 function [data1,data2,isBigEnough]=plotWStderr_simple(data1,data2,trialDuration,c1,c2,times,allLines)
 
-norm=1;
+norm=0;
 % normWindow=[4 4.7];
 % normWindow=[3 6];
-normWindow=[1 3];
-baseSubtract=1;
+normWindow=[2.25 3.1];
+baseSubtract=0;
 baseWindow=[0 0.65];
 % baseWindow=[0 2.3];
 % baseWindow=[0.5 1.2];
@@ -32,23 +32,25 @@ if baseSubtract==1
     end
 end
 
-% thresh=2*10^4; 
-% thresh=0.6*10^4; 
-% thresh=0.25*10^4;
-thresh=0.01*10^4; 
-% thresh=3.5*10^4;
-% thresh=0.44*10^4; % for 4 Hz
-% thresh=0.10*10^4; % for 14 Hz
-% thresh=0.6*10^4; % for 20 Hz
-% isBigEnough=(nanmean(data1(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh & nanmean(data2(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh) & nanmean(data1(:,t>=normWindow(1) & t<=normWindow(2)),2)>0 & nanmean(data2(:,t>=normWindow(1) & t<=normWindow(2)),2)>0;
-isBigEnough=(nanmean(data1(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh);
-% isBigEnough=nanmean(data1(:,t>=5 & t<=6),2)>thresh;
-% isBigEnough=(nanmean(data1(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh & nanmean(data2(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh);
-% isBigEnough=(nanmean(data2(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh);
-data1=data1(isBigEnough,:);
-data2=data2(isBigEnough,:);
-disp(sum(isBigEnough==1));
- 
+% % thresh=2*10^4; 
+% % thresh=0.6*10^4; 
+% % thresh=0.25*10^4;
+% thresh=0.01*10^4; 
+% thresh=0.008*10^4; 
+% % thresh=3.5*10^4;
+% % thresh=0.44*10^4; % for 4 Hz
+% % thresh=0.10*10^4; % for 14 Hz
+% % thresh=0.6*10^4; % for 20 Hz
+% % isBigEnough=(nanmean(data1(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh & nanmean(data2(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh) & nanmean(data1(:,t>=normWindow(1) & t<=normWindow(2)),2)>0 & nanmean(data2(:,t>=normWindow(1) & t<=normWindow(2)),2)>0;
+% % isBigEnough=(nanmean(data1(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh);
+% isBigEnough=((nanmean(data1(:,t>=2.5 & t<=3),2)>thresh) & (nanmean(data1(:,t>=2.5 & t<=3),2)<2.3*10^4)) | (nanmean(data1(:,t>=2.5 & t<=3),2)>2.75*10^4);
+% % isBigEnough=nanmean(data1(:,t>=5 & t<=6),2)>thresh;
+% % isBigEnough=(nanmean(data1(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh & nanmean(data2(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh);
+% % isBigEnough=(nanmean(data2(:,t>=normWindow(1) & t<=normWindow(2)),2)>thresh);
+% data1=data1(isBigEnough,:);
+% data2=data2(isBigEnough,:);
+% disp(sum(isBigEnough==1));
+%  
 baseWindow=[0.51 1]; % for LOW FREQ
 baseWindow=[0.9 1]; % for HIGH FREQ
 

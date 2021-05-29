@@ -7,6 +7,7 @@ function [F1sortedbyalpha]=combineF1distributions(datadir,addName,suppressOutput
 responsiveOnly=false;
 visResponseThresh_backup='50';
 onlyTakeAboveZero=false;
+doNormFacs=true;
 
 % bincenters=[-10:0.01:10];
 bincenters=[-100:0.1:100];
@@ -105,6 +106,50 @@ if iscell(datadir)
             theta_noLED_out=a.theta_noLED_out;
             a=load([d '\' 'theta_LED_out.mat']);
             theta_LED_out=a.theta_LED_out;
+            
+            noTheta_noLED_out_F1s_normed=[];
+            noTheta_LED_out_F1s_normed=[];
+            theta_noLED_out_F1s_normed=[];
+            theta_LED_out_F1s_normed=[];
+            if doNormFacs==true
+                a=load([d '\' 'noTheta_noLED_normFacs.mat']);
+                noTheta_noLED_normFacs=a.noTheta_noLED_normFacs;
+                a=load([d '\' 'noTheta_LED_normFacs.mat']);
+                noTheta_LED_normFacs=a.noTheta_LED_normFacs;
+                a=load([d '\' 'theta_noLED_normFacs.mat']);
+                theta_noLED_normFacs=a.theta_noLED_normFacs;
+                a=load([d '\' 'theta_LED_normFacs.mat']);
+                theta_LED_normFacs=a.theta_LED_normFacs;
+                
+                if length(noTheta_noLED_normFacs)~=size(noTheta_noLED_out.F1s,2)
+                    error(['error in ' d ' mismatched sizes of F1s and normFacs']);
+                else
+                    noTheta_noLED_normFacs(noTheta_noLED_normFacs==0)=nan;
+                    noTheta_noLED_out_F1s_normed=noTheta_noLED_out.F1s./(repmat(noTheta_noLED_normFacs,size(noTheta_noLED_out.F1s,1),1)); 
+                    noTheta_noLED_out_F1s_normed(isinf(noTheta_noLED_out_F1s_normed))=nan;
+                end
+                if length(noTheta_LED_normFacs)~=size(noTheta_LED_out.F1s,2)
+                    error(['error in ' d ' mismatched sizes of F1s and normFacs']);
+                else
+                    noTheta_LED_normFacs(noTheta_LED_normFacs==0)=nan;
+                    noTheta_LED_out_F1s_normed=noTheta_LED_out.F1s./(repmat(noTheta_LED_normFacs,size(noTheta_LED_out.F1s,1),1));
+                    noTheta_LED_out_F1s_normed(isinf(noTheta_LED_out_F1s_normed))=nan;
+                end
+                if length(theta_noLED_normFacs)~=size(theta_noLED_out.F1s,2)
+                    error(['error in ' d ' mismatched sizes of F1s and normFacs']);
+                else
+                    theta_noLED_normFacs(theta_noLED_normFacs==0)=nan;
+                    theta_noLED_out_F1s_normed=theta_noLED_out.F1s./(repmat(theta_noLED_normFacs,size(theta_noLED_out.F1s,1),1));
+                    theta_noLED_out_F1s_normed(isinf(theta_noLED_out_F1s_normed))=nan;
+                end
+                if length(theta_LED_normFacs)~=size(theta_LED_out.F1s,2)
+                    error(['error in ' d ' mismatched sizes of F1s and normFacs']);
+                else
+                    theta_LED_normFacs(theta_LED_normFacs==0)=nan;
+                    theta_LED_out_F1s_normed=theta_LED_out.F1s./(repmat(theta_LED_normFacs,size(theta_LED_out.F1s,1),1));
+                    theta_LED_out_F1s_normed(isinf(theta_LED_out_F1s_normed))=nan;
+                end
+            end
         end
         
         if responsiveOnly==true
@@ -146,21 +191,39 @@ if iscell(datadir)
         all_theta_noLED_F1=[all_theta_noLED_F1 reshape(theta_noLED_out.F1s(1:end),1,length(theta_noLED_out.F1s(1:end)))];
         all_theta_LED_F1=[all_theta_LED_F1 reshape(theta_LED_out.F1s(1:end),1,length(theta_LED_out.F1s(1:end)))];
         
-        [low_alpha,high_alpha]=sortByAlpha(noTheta_noLED_out.F1s,noTheta_noLED_out.alphas);
-        all_noTheta_noLED_F1_sortedByAlpha_low=[all_noTheta_noLED_F1_sortedByAlpha_low low_alpha];
-        all_noTheta_noLED_F1_sortedByAlpha_high=[all_noTheta_noLED_F1_sortedByAlpha_high high_alpha];
-
-        [low_alpha,high_alpha]=sortByAlpha(noTheta_LED_out.F1s,noTheta_LED_out.alphas);
-        all_noTheta_LED_F1_sortedByAlpha_low=[all_noTheta_LED_F1_sortedByAlpha_low low_alpha];
-        all_noTheta_LED_F1_sortedByAlpha_high=[all_noTheta_LED_F1_sortedByAlpha_high high_alpha];        
-        
-        [low_alpha,high_alpha]=sortByAlpha(theta_noLED_out.F1s,theta_noLED_out.alphas);
-        all_theta_noLED_F1_sortedByAlpha_low=[all_theta_noLED_F1_sortedByAlpha_low low_alpha];
-        all_theta_noLED_F1_sortedByAlpha_high=[all_theta_noLED_F1_sortedByAlpha_high high_alpha];
-        
-        [low_alpha,high_alpha]=sortByAlpha(theta_LED_out.F1s,theta_LED_out.alphas);
-        all_theta_LED_F1_sortedByAlpha_low=[all_theta_LED_F1_sortedByAlpha_low low_alpha];
-        all_theta_LED_F1_sortedByAlpha_high=[all_theta_LED_F1_sortedByAlpha_high high_alpha];
+        if doNormFacs==false
+            [low_alpha,high_alpha]=sortByAlpha(noTheta_noLED_out.F1s,noTheta_noLED_out.alphas,[]);
+            all_noTheta_noLED_F1_sortedByAlpha_low=[all_noTheta_noLED_F1_sortedByAlpha_low low_alpha];
+            all_noTheta_noLED_F1_sortedByAlpha_high=[all_noTheta_noLED_F1_sortedByAlpha_high high_alpha];
+            
+            [low_alpha,high_alpha]=sortByAlpha(noTheta_LED_out.F1s,noTheta_LED_out.alphas,[]);
+            all_noTheta_LED_F1_sortedByAlpha_low=[all_noTheta_LED_F1_sortedByAlpha_low low_alpha];
+            all_noTheta_LED_F1_sortedByAlpha_high=[all_noTheta_LED_F1_sortedByAlpha_high high_alpha];
+            
+            [low_alpha,high_alpha]=sortByAlpha(theta_noLED_out.F1s,theta_noLED_out.alphas,[]);
+            all_theta_noLED_F1_sortedByAlpha_low=[all_theta_noLED_F1_sortedByAlpha_low low_alpha];
+            all_theta_noLED_F1_sortedByAlpha_high=[all_theta_noLED_F1_sortedByAlpha_high high_alpha];
+            
+            [low_alpha,high_alpha]=sortByAlpha(theta_LED_out.F1s,theta_LED_out.alphas,[]);
+            all_theta_LED_F1_sortedByAlpha_low=[all_theta_LED_F1_sortedByAlpha_low low_alpha];
+            all_theta_LED_F1_sortedByAlpha_high=[all_theta_LED_F1_sortedByAlpha_high high_alpha];
+        else
+            [~,~,low_alpha,high_alpha]=sortByAlpha(noTheta_noLED_out.F1s,noTheta_noLED_out.alphas,noTheta_noLED_out_F1s_normed);
+            all_noTheta_noLED_F1_sortedByAlpha_low=[all_noTheta_noLED_F1_sortedByAlpha_low low_alpha];
+            all_noTheta_noLED_F1_sortedByAlpha_high=[all_noTheta_noLED_F1_sortedByAlpha_high high_alpha];
+            
+            [~,~,low_alpha,high_alpha]=sortByAlpha(noTheta_LED_out.F1s,noTheta_LED_out.alphas,noTheta_LED_out_F1s_normed);
+            all_noTheta_LED_F1_sortedByAlpha_low=[all_noTheta_LED_F1_sortedByAlpha_low low_alpha];
+            all_noTheta_LED_F1_sortedByAlpha_high=[all_noTheta_LED_F1_sortedByAlpha_high high_alpha];
+            
+            [~,~,low_alpha,high_alpha]=sortByAlpha(theta_noLED_out.F1s,theta_noLED_out.alphas,theta_noLED_out_F1s_normed);
+            all_theta_noLED_F1_sortedByAlpha_low=[all_theta_noLED_F1_sortedByAlpha_low low_alpha];
+            all_theta_noLED_F1_sortedByAlpha_high=[all_theta_noLED_F1_sortedByAlpha_high high_alpha];
+            
+            [~,~,low_alpha,high_alpha]=sortByAlpha(theta_LED_out.F1s,theta_LED_out.alphas,theta_LED_out_F1s_normed);
+            all_theta_LED_F1_sortedByAlpha_low=[all_theta_LED_F1_sortedByAlpha_low low_alpha];
+            all_theta_LED_F1_sortedByAlpha_high=[all_theta_LED_F1_sortedByAlpha_high high_alpha];
+        end
         
         all_noTheta_noLED_alphas=[all_noTheta_noLED_alphas reshape(noTheta_noLED_out.alphas(1:end),1,length(noTheta_noLED_out.alphas(1:end)))];
         all_noTheta_LED_alphas=[all_noTheta_LED_alphas reshape(noTheta_LED_out.alphas(1:end),1,length(noTheta_LED_out.alphas(1:end)))];
@@ -295,16 +358,34 @@ title(tit);
 
 end
 
-function [low_alpha,high_alpha]=sortByAlpha(temp,temp_alpha)
+function [low_alpha,high_alpha,low_normed,high_normed]=sortByAlpha(temp,temp_alpha,temp_normed)
 
-low_alpha=[];
-high_alpha=[];
+low_alpha=nan(1,size(temp,1));
+high_alpha=nan(1,size(temp,1));
+low_normed=nan(1,size(temp,1));
+high_normed=nan(1,size(temp,1));
 
 % units are rows, columns are trials
 for i=1:size(temp,1)
     med_alpha=nanmedian(temp_alpha(i,:));
-    low_alpha(i)=nanmean(temp(i,temp_alpha(i,:)<med_alpha));
-    high_alpha(i)=nanmean(temp(i,temp_alpha(i,:)>=med_alpha));
+%     takeLow=temp_alpha(i,:)<med_alpha;
+%     takeHigh=temp_alpha(i,:)>=med_alpha;
+    takeLow=temp_alpha(i,:)<prctile(temp_alpha(i,:),18);
+    takeHigh=temp_alpha(i,:)>=prctile(temp_alpha(i,:),50);
+    low_alpha(i)=nanmean(temp(i,takeLow));
+    high_alpha(i)=nanmean(temp(i,takeHigh));
+    if ~isempty(temp_normed)
+        low_normed(i)=nanmean(temp_normed(i,takeLow));
+        high_normed(i)=nanmean(temp_normed(i,takeHigh));
+    end
 end
 
+if ~isempty(temp_normed)
+    if length(low_alpha)~=length(low_normed)
+        error('problem in sorting by alpha');
+    end
+    if length(high_alpha)~=length(high_normed)
+        error('problem in sorting by alpha');
+    end
+end
 end
