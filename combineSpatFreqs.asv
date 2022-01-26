@@ -14,17 +14,7 @@ ls=dir(datadir);
 k=1;
 for i=3:length(ls)
     disp(i);
-    if ~isempty(regexp(ls(i).name,'m341')) || ~isempty(regexp(ls(i).name,'m342')) || ~isempty(regexp(ls(i).name,'m343'))
-        currMouse=1;
-    elseif ~isempty(regexp(ls(i).name,'m347'))
-        currMouse=2;
-    elseif ~isempty(regexp(ls(i).name,'m354')) || ~isempty(regexp(ls(i).name,'m355')) || ~isempty(regexp(ls(i).name,'m361')) || ~isempty(regexp(ls(i).name,'m362')) || ~isempty(regexp(ls(i).name,'m375'))
-        currMouse=3;
-    elseif ~isempty(regexp(ls(i).name,'m381'))
-        currMouse=4;
-    elseif ~isempty(regexp(ls(i).name,'m405')) || ~isempty(regexp(ls(i).name,'m407'))
-        currMouse=5;
-    end
+    if ~isempty(regexp(ls(i).name,'m341') || ~isempty(regexp(
     % read in each day's data
     a=load([ls(i).folder '\' ls(i).name '\spatFreqs.mat']);
     spatFreqs=a.spatFreqs;
@@ -74,7 +64,6 @@ for i=3:length(ls)
         all_theta_LED_numer(k:k+(size(a.numer,1)-1),indIntoAll(j))=a.numer(:,j);
     end
     k=k+size(a.numer,1);
-    whichMouse(k:k+(size(a.numer,1)-1))=currMouse;
 end
 
 sz=100;
@@ -107,9 +96,6 @@ for i=[1 2 3 5]
     currsum=currsum+nanmean(tempdata(~isinf(tempdata)));
 end
 currsum=currsum./length(allSpatFreqs);
-
-% Mouse by mouse
-
 
 i=1;
 figure(); 
