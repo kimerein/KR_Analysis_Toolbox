@@ -77,14 +77,14 @@ for i=3:length(ls)
     whichMouse(k:k+(size(a.numer,1)-1))=currMouse;
 end
 
-sz=100;
+sz=100; 
 
 all_theta_LED_numer(~isnan(all_noTheta_noLED_numer(:,4)),:)=nan(nansum(~isnan(all_noTheta_noLED_numer(:,4))),5);
 all_theta_noLED_numer(~isnan(all_noTheta_noLED_numer(:,4)),:)=nan(nansum(~isnan(all_noTheta_noLED_numer(:,4))),5);
 all_noTheta_LED_numer(~isnan(all_noTheta_noLED_numer(:,4)),:)=nan(nansum(~isnan(all_noTheta_noLED_numer(:,4))),5);
 all_noTheta_noLED_numer(~isnan(all_noTheta_noLED_numer(:,4)),:)=nan(nansum(~isnan(all_noTheta_noLED_numer(:,4))),5);
 
-% discardNonResponsive=all_noTheta_noLED_numer(1:end)<0 | all_theta_noLED_numer(1:end)<0;
+% discardNonResponsive=all_noTheta_noLED_numer(1:end)<0.1e4 & all_theta_noLED_numer(1:end)<0.1e4;
 % all_theta_LED_numer(discardNonResponsive)=nan; 
 % all_noTheta_LED_numer(discardNonResponsive)=nan; 
 % all_theta_noLED_numer(discardNonResponsive)=nan; 
@@ -243,10 +243,16 @@ scatter(all_theta_noLED_numer(:,i)./nanmean(all_theta_noLED_denom,2),all_theta_L
 % all_noTheta_noLED_numer(discardNonResponsive)=nan; 
 
 
+% rmoutliers
+all_noTheta_noLED_denom([48 49 50 52 54],:)=nan;
+all_noTheta_noLED_denom([48 49 50 52 54], :)=nan;
+all_noTheta_noLED_denom([48 49 50 52 54],:)=nan;
+all_noTheta_noLED_denom([48 49 50 52 54],:)=nan;
+
 i=1;
 figure(); 
-scatter(ones(1000,1),all_noTheta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,'k'); %alpha 0.05;
-hold on; scatter(1.05*ones(1000,1),all_theta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,[0    0.5938    1.0000]); %alpha 0.05;
+% scatter(ones(1000,1),all_noTheta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,'k'); %alpha 0.05;
+% hold on; scatter(1.05*ones(1000,1),all_theta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,[0    0.5938    1.0000]); %alpha 0.05;
 tempdata=all_noTheta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2);
 line([1-0.025 1+0.025],[nanmean(tempdata) nanmean(tempdata)],'Color','k');
 line([1 1],[nanmean(tempdata)-nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata))) nanmean(tempdata)+nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata)))],'Color','k');
@@ -255,8 +261,8 @@ line([1.05-0.025 1.05+0.025],[nanmean(tempdata) nanmean(tempdata)],'Color',[0   
 line([1.05 1.05],[nanmean(tempdata)-nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata))) nanmean(tempdata)+nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata)))],'Color',[0    0.5938    1.0000]);
 
 i=2;
-scatter(2*ones(1000,1),all_noTheta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,'k'); %alpha 0.05;
-hold on; scatter(2.05*ones(1000,1),all_theta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,[0    0.5938    1.0000]); %alpha 0.05;
+% scatter(2*ones(1000,1),all_noTheta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,'k'); %alpha 0.05;
+% hold on; scatter(2.05*ones(1000,1),all_theta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,[0    0.5938    1.0000]); %alpha 0.05;
 tempdata=all_noTheta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2);
 line([2-0.025 2+0.025],[nanmean(tempdata) nanmean(tempdata)],'Color','k');
 line([2 2],[nanmean(tempdata)-nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata))) nanmean(tempdata)+nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata)))],'Color','k');
@@ -265,8 +271,8 @@ line([2.05-0.025 2.05+0.025],[nanmean(tempdata) nanmean(tempdata)],'Color',[0   
 line([2.05 2.05],[nanmean(tempdata)-nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata))) nanmean(tempdata)+nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata)))],'Color',[0    0.5938    1.0000]);
 
 i=3;
-scatter(3*ones(1000,1),all_noTheta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,'k'); %alpha 0.05;
-hold on; scatter(3.05*ones(1000,1),all_theta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,[0    0.5938    1.0000]); %alpha 0.05;
+% scatter(3*ones(1000,1),all_noTheta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,'k'); %alpha 0.05;
+% hold on; scatter(3.05*ones(1000,1),all_theta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,[0    0.5938    1.0000]); %alpha 0.05;
 tempdata=all_noTheta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2);
 line([3-0.025 3+0.025],[nanmean(tempdata) nanmean(tempdata)],'Color','k');
 line([3 3],[nanmean(tempdata)-nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata))) nanmean(tempdata)+nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata)))],'Color','k');
@@ -276,8 +282,8 @@ line([3.05-0.025 3.05+0.025],[nanmean(tempdata) nanmean(tempdata)],'Color',[0   
 line([3.05 3.05],[nanmean(tempdata)-nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata))) nanmean(tempdata)+nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata)))],'Color',[0    0.5938    1.0000]);
 
 i=4;
-scatter(4*ones(1000,1),all_noTheta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,'k'); %alpha 0.05;
-hold on; scatter(4.05*ones(1000,1),all_theta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,[0    0.5938    1.0000]); %alpha 0.05;
+% scatter(4*ones(1000,1),all_noTheta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,'k'); %alpha 0.05;
+% hold on; scatter(4.05*ones(1000,1),all_theta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,[0    0.5938    1.0000]); %alpha 0.05;
 tempdata=all_noTheta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2);
 line([4-0.025 4+0.025],[nanmean(tempdata) nanmean(tempdata)],'Color','k');
 line([4 4],[nanmean(tempdata)-nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata))) nanmean(tempdata)+nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata)))],'Color','k');
@@ -286,8 +292,8 @@ line([4.05-0.025 4.05+0.025],[nanmean(tempdata) nanmean(tempdata)],'Color',[0   
 line([4.05 4.05],[nanmean(tempdata)-nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata))) nanmean(tempdata)+nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata)))],'Color',[0    0.5938    1.0000]);
 
 i=5;
-scatter(5*ones(1000,1),all_noTheta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,'k'); %alpha 0.05;
-hold on; scatter(5.05*ones(1000,1),all_theta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,[0    0.5938    1.0000]); %alpha 0.05;
+% scatter(5*ones(1000,1),all_noTheta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,'k'); %alpha 0.05;
+% hold on; scatter(5.05*ones(1000,1),all_theta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2),sz,[0    0.5938    1.0000]); %alpha 0.05;
 tempdata=all_noTheta_noLED_numer(:,i)./nanmean(all_noTheta_noLED_denom,2);
 line([5-0.025 5+0.025],[nanmean(tempdata) nanmean(tempdata)],'Color','k');
 line([5 5],[nanmean(tempdata)-nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata))) nanmean(tempdata)+nanstd(tempdata,[],1)./sqrt(nansum(~isnan(tempdata)))],'Color','k');

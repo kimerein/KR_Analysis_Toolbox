@@ -1,0 +1,13 @@
+function plotFilledCDF(data)
+
+figure(); 
+[f,x,flo,fup]=ecdf(data,'Bounds','on');
+temp=find(x>=0,1,'first');
+fill([fliplr(x(x>0)); zeros(4,1); x(x>0)],[ones(size(f(x>0))); [1; 0.9; 0.8; f(temp)]; f(x>0)],[0.5 0.5 0.5]);
+hold on;
+temp=find(x<=0,1,'last');
+fill([fliplr(x(x<0)); x(x<0);],[ones(size(f(x<0))); [1; 0.9; 0.8; f(temp)]; f(x>0)],[0.8 0.2 0.2]);
+plot(x,f,'Color','k');
+
+
+end
