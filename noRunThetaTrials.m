@@ -1,0 +1,313 @@
+function [F1acrosscells,runningBySweep,runthresh,LFPbySweep,runningTrials]=noRunThetaTrials(runningBySweep,daqfilesdir,expt,spikesdir,ledoffval,ledonval,outputDir,LFPbySweep)
+
+runthresh=[];
+F1acrosscells=[];
+
+% uses={{1}; {2}; {3}; {4}; {5}; {6}; {7}; {8}};
+% uses_tri={{1:284}; {1:284}; {1:284}; {1:284}; {1:284}; {1:284}; {1:284}; {1:284}};
+% uses={{[1:12]}};
+uses={{[1 1.05]}; {[2 2.05]}; {[4 4.05]}; {[6 6.05]}; {[8 8.05]}; {[10 10.05]}; {[12 12.05]}; {[14 14.05]}; {[16 16.05]}; {[18 18.05]}; {[20 20.05]}; {[30 30.05]}; {[40 40.05]}; {[50 50.05]}; {[60 60.05]}};
+uses_tri={{1:964}; {1:964}; {1:964}; {1:964}; {1:964}; {1:964}; {1:964}; {1:964}; {1:964}; {1:964}; {1:964}; {1:964}; {1:964}; {1:964}; {1:964}};
+% uses={{[4 4.05]}};
+% uses_tri={{1:744}};
+% uses={{[12]}};
+% uses_tri={{1:264}};
+% uses={{[6]}};
+% uses_tri={{1:264}};
+% F1range=[2.5 3.5];
+F1range=[1];
+% F1range=[11.5 12.5];
+% stimOnWindow=[3 6]; % in seconds
+% stimOnWindow=[4 6.5]; % in seconds
+% stimOnWindow=[0.3 1.8]; % in seconds
+stimOnWindow=[1 3]; % in seconds
+saveOrLoad='save';
+% typeOfTrial='nonrunning_theta';
+% typeOfTrial='running_theta';
+typeOfTrial='both';
+
+encoderChannel=32; % arbora
+physChannel=2; % arbora
+%
+% kim old, e.g., mawake127
+% ch 5 minus ch 4 to get encoder
+% phys is 
+% encoderChannel=[4 5];
+% physChannel=8;
+%
+% newer Kim recs
+% ledChannel is 4,7
+% 2 is photodiode
+% 1 is trigger
+% encoder channel is 5 minus 4
+% encoderChannel=[4 5];
+% % physChannel=32;
+% physChannel=16;
+
+if isempty(runningBySweep)
+    warning('off');
+    [runningBySweep,Fs]=getJustLFPbySweep(daqfilesdir,expt.files.names,expt.files.Fs(1),1,encoderChannel);
+    if strcmp(saveOrLoad,'save')
+        save([outputDir '\runningBySweep.mat'],'runningBySweep');
+    end
+    if length(encoderChannel)>1
+        L2=runningBySweep{1};
+        L=runningBySweep{2};
+        newL=bandPassLFP(L-L2,Fs,0,10,0);
+        runningBySweep=cell(1,1); 
+        runningBySweep{1}=newL;
+        if strcmp(saveOrLoad,'save')
+            save([outputDir '\fixed_runningBySweep.mat'],'runningBySweep');
+        end
+    end
+end
+if isempty(LFPbySweep)
+    warning('off');
+    [LFPbySweep,Fs]=getJustLFPbySweep(daqfilesdir,expt.files.names,expt.files.Fs(1),1,physChannel);
+    if strcmp(saveOrLoad,'save')
+        save([outputDir '\LFPbySweep.mat'],'LFPbySweep');
+        save([outputDir '\Fs.mat'],'Fs');
+    end
+end
+% return
+
+r=downSampMatrix(runningBySweep{1},10);
+L=downSampMatrix(LFPbySweep{1},10);
+[runningTrials,runthresh]=findRunningTrials(r);
+if strcmp(saveOrLoad,'save')
+    save([outputDir '\runningTrials.mat'],'runningTrials');
+    save([outputDir '\runthresh.mat'],'runthresh');
+end
+
+for i=1:length(spikesdir)
+    a=load([spikesdir{i} '\' 'dLGNpsth.mat']);
+    dLGNpsth=a.dLGNpsth;
+    a=load([spikesdir{i} '\' 'noThetaTrials.mat']);
+    noThetaTrials=a.noThetaTrials;
+%     noThetaTrials(runningTrials==1)=0; % fix for m206
+%     dLGNpsth.unitStimcond=dLGNpsth.unitLED; % fix for m206
+    if i==1
+        % find non-running but theta trials
+        f=find(noThetaTrials==0 & runningTrials'==0);
+        figure(); 
+        plot(r(f,:)');
+        title('non-running during theta trials');
+        
+        figure();
+        plot((L(f,:)+repmat([1:length(f)]'/5,1,size(L,2)))');
+        title('LFP during theta but non-running trials');
+    end
+    seps=regexp(spikesdir{i},'\');
+    temp=spikesdir{i};
+    whichT=temp(seps(end)+1:end);
+    if strcmp(saveOrLoad,'save')
+        doF1analysis_saveAllTrialSpecs(expt,[],[outputDir '\' whichT],[],dLGNpsth,ledoffval,ledonval,[],uses,uses_tri,noThetaTrials,true);
+    end
+end
+
+% load data and analyze
+whichConds={'noTheta_noLED_allS_S','theta_noLED_allS_S'};
+for i=1:length(whichConds)
+    currcond=whichConds{i};
+    for j=1:length(spikesdir) % load trode by trode
+        seps=regexp(spikesdir{j},'\');
+        temp=spikesdir{j};
+        whichT=temp(seps(end)+1:end);
+        currdir=[outputDir '\' whichT];
+        forsubname=regexp(currcond,'_allS_S');
+        subname=currcond(1:forsubname(1)-1);
+        a=load([currdir '\' subname '\allS.mat']);
+        t=a.temp.t;
+        f=a.temp.f;
+        if j==1
+            F1acrosscells.(currcond)=[];
+        end
+        a=load([currdir '\' 'dLGNpsth.mat']);
+        dLGNpsth=a.dLGNpsth;
+        a=load([currdir '\' 'noThetaTrials.mat']);
+        noThetaTrials=a.noThetaTrials;
+        l=dLGNpsth.unitLED{1};
+        s=dLGNpsth.unitStimcond{1};
+        
+        if ~isempty(regexp(currcond,'noTheta_noLED'))
+            subtrials=find(l'==ledoffval & noThetaTrials==1);
+        elseif ~isempty(regexp(currcond,'theta_noLED'))
+            subtrials=find(l'==ledoffval & noThetaTrials==0);
+        end
+        
+        % choose which type of trial to analyze
+        switch typeOfTrial
+            case 'nonrunning_theta' 
+                % find non-running but theta trials
+                if strcmp(currcond,'noTheta_noLED_allS_S')
+                    % not into theta trials yet
+                elseif strcmp(currcond,'theta_noLED_allS_S')
+                    fi=find(l'==ledoffval & noThetaTrials==0 & runningTrials'==0);
+                    whichTrials=ismember(subtrials,fi);
+                    cbc=nan(length(dLGNpsth.psths),length(t));
+                    for k=1:length(dLGNpsth.psths) % load cell by cell, all trials for this condition
+                        a=load([currdir '\' currcond '\cell' num2str(k) '.mat']);
+                        % get F1 for this cell
+                        if length(F1range)==1
+                            fi=find(l'==ledoffval & noThetaTrials==0 & runningTrials'==0 & l'==F1range(1));
+                            whichTrials=ismember(subtrials,fi);
+                            cbc(k,:)=getF1(a.temp,[F1range(1)-0.7 F1range(1)+0.7],whichTrials,t,f);
+                        else
+                            cbc(k,:)=getF1(a.temp,F1range,whichTrials,t,f);
+                        end
+                    end
+                    if j==1
+                        F1acrosscells.(typeOfTrial)=[];
+                    end
+                    F1acrosscells.(typeOfTrial)=[F1acrosscells.(typeOfTrial); cbc];
+                end
+            case 'running_theta'
+                % find non-running but theta trials
+                if strcmp(currcond,'noTheta_noLED_allS_S')
+                    % not into theta trials yet
+                elseif strcmp(currcond,'theta_noLED_allS_S')
+                    fi=find(l'==ledoffval & noThetaTrials==0 & runningTrials'==1);
+                    whichTrials=ismember(subtrials,fi);
+                    cbc=nan(length(dLGNpsth.psths),length(t));
+                    for k=1:length(dLGNpsth.psths) % load cell by cell, all trials for this condition
+                        a=load([currdir '\' currcond '\cell' num2str(k) '.mat']);
+                        % get F1 for this cell
+                        if length(F1range)==1
+                            fi=find(l'==ledoffval & noThetaTrials==0 & runningTrials'==1 & l'==F1range(1));
+                            whichTrials=ismember(subtrials,fi);
+                            cbc(k,:)=getF1(a.temp,[F1range(1)-0.7 F1range(1)+0.7],whichTrials,t,f);
+                        else
+                            cbc(k,:)=getF1(a.temp,F1range,whichTrials,t,f);
+                        end
+                    end
+                    if j==1
+                        F1acrosscells.(typeOfTrial)=[];
+                    end
+                    F1acrosscells.(typeOfTrial)=[F1acrosscells.(typeOfTrial); cbc];
+                end
+            case 'both'
+                % find non-running but theta trials
+                if strcmp(currcond,'noTheta_noLED_allS_S')
+                    % not into theta trials yet
+                elseif strcmp(currcond,'theta_noLED_allS_S')
+                    backup_type=typeOfTrial;
+                    typeOfTrial='nonrunning_theta';
+                    fi=find(l'==ledoffval & noThetaTrials==0 & runningTrials'==0);
+                    whichTrials=ismember(subtrials,fi);
+                    cbc=nan(length(dLGNpsth.psths),length(t));
+                    for k=1:length(dLGNpsth.psths) % load cell by cell, all trials for this condition
+                        a=load([currdir '\' currcond '\cell' num2str(k) '.mat']);
+                        % get F1 for this cell
+                        if length(F1range)==1
+                            fi=find(l'==ledoffval & noThetaTrials==0 & runningTrials'==0 & l'==F1range(1));
+                            whichTrials=ismember(subtrials,fi);
+                            cbc(k,:)=getF1(a.temp,[F1range(1)-0.7 F1range(1)+0.7],whichTrials,t,f);
+                        else
+                            cbc(k,:)=getF1(a.temp,F1range,whichTrials,t,f);
+                        end
+                    end
+                    if j==1
+                        F1acrosscells.(typeOfTrial)=[];
+                    end
+                    F1acrosscells.(typeOfTrial)=[F1acrosscells.(typeOfTrial); cbc];
+                    % then other
+                    typeOfTrial='running_theta';
+                    fi=find(l'==ledoffval & noThetaTrials==0 & runningTrials'==1);
+                    whichTrials=ismember(subtrials,fi);
+                    cbc=nan(length(dLGNpsth.psths),length(t));
+                    for k=1:length(dLGNpsth.psths) % load cell by cell, all trials for this condition
+                        a=load([currdir '\' currcond '\cell' num2str(k) '.mat']);
+                        % get F1 for this cell
+                        if length(F1range)==1
+                            fi=find(l'==ledoffval & noThetaTrials==0 & runningTrials'==1 & l'==F1range(1));
+                            whichTrials=ismember(subtrials,fi);
+                            cbc(k,:)=getF1(a.temp,[F1range(1)-0.7 F1range(1)+0.7],whichTrials,t,f);
+                        else
+                            cbc(k,:)=getF1(a.temp,F1range,whichTrials,t,f);
+                        end
+                    end
+                    if j==1
+                        F1acrosscells.(typeOfTrial)=[];
+                    end
+                    F1acrosscells.(typeOfTrial)=[F1acrosscells.(typeOfTrial); cbc];
+                    typeOfTrial=backup_type;
+                end
+        end
+        
+        cbc=nan(length(dLGNpsth.psths),length(t));
+        for k=1:length(dLGNpsth.psths) % load cell by cell, all trials for this condition
+            a=load([currdir '\' currcond '\cell' num2str(k) '.mat']);
+            % get F1 for this cell
+            if length(F1range)==1
+                fi=find(l'==ledoffval & l'==F1range(1));
+                whichTrials=ismember(subtrials,fi);
+            else
+                whichTrials=1:size(a.temp,3);
+            end
+            if length(F1range)==1
+                cbc(k,:)=getF1(a.temp,[F1range(1)-0.7 F1range(1)+0.7],whichTrials,t,f);
+            else
+                cbc(k,:)=getF1(a.temp,F1range,whichTrials,t,f);
+            end
+        end
+        F1acrosscells.(currcond)=[F1acrosscells.(currcond); cbc];
+    end
+end
+
+figure(); plot(t,nanmean(F1acrosscells.noTheta_noLED_allS_S,1),'Color','k'); 
+hold on; 
+se=nanstd(F1acrosscells.noTheta_noLED_allS_S,[],1)./size(F1acrosscells.noTheta_noLED_allS_S,1);
+plot(t,nanmean(F1acrosscells.noTheta_noLED_allS_S,1)+se,'Color','k'); 
+plot(t,nanmean(F1acrosscells.noTheta_noLED_allS_S,1)-se,'Color','k'); 
+plot(t,nanmean(F1acrosscells.theta_noLED_allS_S,1),'Color','r');
+se=nanstd(F1acrosscells.theta_noLED_allS_S,[],1)./size(F1acrosscells.theta_noLED_allS_S,1);
+plot(t,nanmean(F1acrosscells.theta_noLED_allS_S,1)+se,'Color','r'); 
+plot(t,nanmean(F1acrosscells.theta_noLED_allS_S,1)-se,'Color','r');
+if isfield(F1acrosscells,'nonrunning_theta')
+    typeOfTrial='nonrunning_theta';
+    plot(t,nanmean(F1acrosscells.(typeOfTrial),1),'Color','g');
+    se=nanstd(F1acrosscells.(typeOfTrial),[],1)./size(F1acrosscells.(typeOfTrial),1);
+    plot(t,nanmean(F1acrosscells.(typeOfTrial),1)+se,'Color','g');
+    plot(t,nanmean(F1acrosscells.(typeOfTrial),1)-se,'Color','g');
+end
+if isfield(F1acrosscells,'running_theta')
+    typeOfTrial='running_theta';
+    plot(t,nanmean(F1acrosscells.(typeOfTrial),1),'Color',[0 0.5 0]);
+    se=nanstd(F1acrosscells.(typeOfTrial),[],1)./size(F1acrosscells.(typeOfTrial),1);
+    plot(t,nanmean(F1acrosscells.(typeOfTrial),1)+se,'Color',[0 0.5 0]);
+    plot(t,nanmean(F1acrosscells.(typeOfTrial),1)-se,'Color',[0 0.5 0]);
+end
+
+save([outputDir '\F1acrosscells.mat'],'F1acrosscells');
+
+end
+
+function F1=getF1(S,F1range,whichTrials,t,f)
+
+F1=nanmean(nanmean(S(:,f>F1range(1) & f<F1range(2),whichTrials),3),2);
+
+end
+
+function [isRunning,runthresh]=findRunningTrials(r)
+    
+varrun=nan(1,size(r,1));
+for i=1:size(r,1)
+    varrun(i)=var(r(i,:));
+end
+
+figure();
+[n,x]=hist(varrun,300);
+plot(x,n,'Color','k');
+
+runthresh=input('What is the threshold for running vs nonrunning trials');
+isRunning=varrun>runthresh;
+
+figure();
+plot(r(isRunning,:)');
+title('running trials');
+
+figure();
+plot(r(isRunning==0,:)');
+title('non-running trials');
+
+end
