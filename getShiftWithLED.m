@@ -1,4 +1,4 @@
-function out=getShiftWithLED(psth,thetaDiff,noTheta_con,noTheta_led,ledOffvals,ledOnvals,stimWindow,spontWindow,useTheseStim)
+function [out,outpsths]=getShiftWithLED(psth,thetaDiff,noTheta_con,noTheta_led,ledOffvals,ledOnvals,stimWindow,spontWindow,useTheseStim)
 
 if isstruct(psth)
     l=psth.unitLED{1};
@@ -45,5 +45,10 @@ line([stimWindow(2) stimWindow(2)],[nanmin(sumF1con) nanmax(sumF1con)],'Color','
 
 disp([conthetadiff; ledthetadiff; conthetadiff-ledthetadiff; nanmean(F1led./F1con)]);
 out=nanmean(F1led./F1con);
+
+outpsths.con_x=t;
+outpsths.led_x=t;
+outpsths.con_y=sumF1con;
+outpsths.led_y=sumF1led;
 
 end
