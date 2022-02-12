@@ -6,6 +6,7 @@ count_nonrunningtheta=1;
 for i=1:length(whichFreqInds)
     w=whichFreqInds(i);
     a=load([datadir '\F1acrosscells_Hz' num2str(freqs(w))]);
+%     a=load([datadir '\F1acrosscells']);
     typeOfTrial='noTheta_noLED_allS_S';
     temp=a.F1acrosscells.(typeOfTrial);
     if i==1
@@ -16,6 +17,8 @@ for i=1:length(whichFreqInds)
             count_notheta=count_notheta+1;
         end
     end
+%     a=load([datadir '\F1acrosscells_Hz' num2str(freqs(w)) 'runtheta']);
+%     typeOfTrial='running_theta';
     typeOfTrial='theta_noLED_allS_S';
     temp=a.F1acrosscells.(typeOfTrial);
     if i==1
@@ -26,6 +29,7 @@ for i=1:length(whichFreqInds)
             count_theta=count_theta+1;
         end
     end
+%     a=load([datadir '\F1acrosscells_Hz' num2str(freqs(w))]);
     typeOfTrial='nonrunning_theta';
     temp=a.F1acrosscells.(typeOfTrial);
     if i==1
@@ -44,6 +48,22 @@ evF1_nonrunningtheta=evF1_nonrunningtheta/count_nonrunningtheta;
 figure(); plot(t,nanmean(evF1_noTheta,1),'Color','k'); hold on;
 plot(t,nanmean(evF1_theta,1),'Color','r');
 plot(t,nanmean(evF1_nonrunningtheta,1),'Color','b');
+temp1=nanmean(evF1_noTheta,1);
+temp2=nanmean(evF1_theta,1);
+temp3=nanmean(evF1_nonrunningtheta,1);
+figure(); 
+temp1=nanmean(temp1(t>stimWindow(1) & t<stimWindow(2)),2)-nanmean(temp1(t>spontWindow(1) & t<spontWindow(2)),2);
+temp=temp1;
+scatter(1,nanmean(temp),[],'k');
+hold on;
+temp2=nanmean(temp2(t>stimWindow(1) & t<stimWindow(2)),2)-nanmean(temp2(t>spontWindow(1) & t<spontWindow(2)),2);
+temp=temp2;
+scatter(3,nanmean(temp),[],'r');
+temp3=nanmean(temp3(t>stimWindow(1) & t<stimWindow(2)),2)-nanmean(temp3(t>spontWindow(1) & t<spontWindow(2)),2);
+temp=temp3;
+scatter(2,nanmean(temp),[],'b');
+line([1 2 3],[nanmean(temp1) nanmean(temp3) nanmean(temp2)]);
+title('mean across cells first evoked');
 
 figure(); 
 temp1=nanmean(evF1_noTheta(:,t>stimWindow(1) & t<stimWindow(2)),2)-nanmean(evF1_noTheta(:,t>spontWindow(1) & t<spontWindow(2)),2);
@@ -65,6 +85,9 @@ title('evoked');
 noTheta_spont=[];
 theta_spont=[];
 nonrunningtheta_spont=[];
+noTheta_psths=[];
+theta_psths=[];
+nonrunningtheta_psths=[];
 for i=1:length(trodeDirs)
     a=load([datadir '\' trodeDirs{i} '\dLGNpsth.mat']);
     dLGNpsth=a.dLGNpsth;
@@ -73,11 +96,28 @@ for i=1:length(trodeDirs)
     for j=1:length(dLGNpsth.psths)
         l=dLGNpsth.unitLED{1};
         temp=dLGNpsth.psths{j};
+        noTheta_psths=[noTheta_psths; nanmean(temp(ismember(l,freqs) & noThetaTrials'==1,:),1)];
+        theta_psths=[theta_psths; nanmean(temp(ismember(l,freqs)  & noThetaTrials'==0 & runningTrials==1,:),1)];
+        nonrunningtheta_psths=[nonrunningtheta_psths; nanmean(temp(ismember(l,freqs)  & noThetaTrials'==0 & runningTrials==0,:),1)];
         noTheta_spont=[noTheta_spont; nanmean(nanmean(temp(ismember(l,freqs) & noThetaTrials'==1,:),1))];
         theta_spont=[theta_spont; nanmean(nanmean(temp(ismember(l,freqs)  & noThetaTrials'==0 & runningTrials==1,:),1))];
         nonrunningtheta_spont=[nonrunningtheta_spont; nanmean(nanmean(temp(ismember(l,freqs)  & noThetaTrials'==0 & runningTrials==0,:),1))];
     end
 end
+figure();
+plot(dLGNpsth.t,nanmean(noTheta_psths,1),'Color','k');
+hold on;
+plot(dLGNpsth.t,nanmean(noTheta_psths,1)-nanstd(noTheta_psths,[],1)./sqrt(size(noTheta_psths,1)),'Color','k');
+plot(dLGNpsth.t,nanmean(noTheta_psths,1)+nanstd(noTheta_psths,[],1)./sqrt(size(noTheta_psths,1)),'Color','k');
+
+plot(dLGNpsth.t,nanmean(theta_psths,1),'Color','r');
+plot(dLGNpsth.t,nanmean(theta_psths,1)-nanstd(theta_psths,[],1)./sqrt(size(theta_psths,1)),'Color','r');
+plot(dLGNpsth.t,nanmean(theta_psths,1)+nanstd(theta_psths,[],1)./sqrt(size(theta_psths,1)),'Color','r');
+
+plot(dLGNpsth.t,nanmean(nonrunningtheta_psths,1),'Color','b');
+plot(dLGNpsth.t,nanmean(nonrunningtheta_psths,1)-nanstd(nonrunningtheta_psths,[],1)./sqrt(size(nonrunningtheta_psths,1)),'Color','b');
+plot(dLGNpsth.t,nanmean(nonrunningtheta_psths,1)+nanstd(nonrunningtheta_psths,[],1)./sqrt(size(nonrunningtheta_psths,1)),'Color','b');
+
 figure();
 temp1=noTheta_spont;
 temp=temp1;
