@@ -22,7 +22,6 @@ edges = 0:binsize:duration;
 n = histc(spiketimes,edges);
 n = n/numtrials/binsize;
 
-nsForStdev=zeros(numtrials,size(n,2));
 if ~isempty(theseTrials)
     allTrials=theseTrials;
 else
@@ -38,6 +37,7 @@ if length(allTrials)~=numtrials
         allTrials=min(unique(spikes.trials)):max(unique(spikes.trials));
     end
 end      
+nsForStdev=zeros(length(allTrials),size(n,2));
 for i=1:length(allTrials)
     cspikes=filtspikes(spikes,0,'trials',allTrials(i));
     if isempty(cspikes.spiketimes)
